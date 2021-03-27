@@ -2,3 +2,9 @@ name: commerce-demo
 recipe: drupal8
 config:
   webroot: web
+services:
+  appserver:
+    webroot: web
+    xdebug: debug
+    config:
+      php: .lando.php.ini
