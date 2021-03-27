@@ -10,11 +10,11 @@
         }
     ],
     "repositories": {
-        "drupal-composer": {
-            "type": "composer",
-            "url": "https://packages.drupal.org/8"
+        "commerce-dps": {
+            "type": "vcs",
+            "url": "https://git.drupalcode.org/project/commerce_dps.git"
         },
-        "drupal": {
+        "drupal-composer": {
             "type": "composer",
             "url": "https://packages.drupal.org/8"
         },
@@ -34,9 +34,10 @@
         "centarro/commerce_kickstart": "^3.0.0",
         "composer/installers": "^1.2",
         "cweagans/composer-patches": "^1.7",
-        "drupal/commerce_dps": "^1.0@beta",
+        "drupal/commerce_dps": "2.0.x-dev@dev",
         "drupal/core": "^8.9.0",
         "drupal/core-composer-scaffold": "^8.9.0",
+        "drupal/devel": "^4.1",
         "drush/drush": "^9.7.1 | ^10.0.0",
         "oomphinc/composer-installers-extender": "^2.0",
         "webflo/drupal-finder": "^1.0.0",
@@ -71,8 +72,7 @@
         ]
     },
     "extra": {
-        "patches": {
-        },
+        "patches-file": "patches/composer-patches.json",
         "composer-exit-on-patch-failure": true,
         "patchLevel": {
             "drupal/core": "-p2"
