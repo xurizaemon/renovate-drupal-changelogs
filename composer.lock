@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "3a727c68ecb35c385ae38937b9bdec3a",
+    "content-hash": "1955f51f03a08f3b7fac9d5fcd988caf",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -14341,6 +14341,52 @@
                 }
             ],
             "time": "2020-07-12T23:59:07+00:00"
+        },
+        {
+            "name": "xurizaemon/drupal-suggested",
+            "version": "v0.0.6",
+            "source": {
+                "type": "git",
+                "url": "https://gitlab.com/xurizaemon/drupal-suggested.git",
+                "reference": "e1cca2fa63e28927942d0d0e95e5a12b0589ce1b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://gitlab.com/api/v4/projects/xurizaemon%2Fdrupal-suggested/repository/archive.zip?sha=e1cca2fa63e28927942d0d0e95e5a12b0589ce1b",
+                "reference": "e1cca2fa63e28927942d0d0e95e5a12b0589ce1b",
+                "shasum": ""
+            },
+            "require": {
+                "behat/behat": "*",
+                "behat/mink": "*",
+                "behat/mink-extension": "*",
+                "behat/mink-goutte-driver": "*",
+                "cweagans/composer-patches": "*",
+                "dmore/behat-chrome-extension": "*",
+                "drupal/drupal-driver": "*",
+                "drupal/drupal-extension": "*",
+                "integratedexperts/behat-screenshot": "*",
+                "integratedexperts/behat-steps": "*",
+                "php-http/guzzle6-adapter": "*",
+                "phpro/grumphp-shim": "*",
+                "rpkamp/mailhog-behat-extension": "*",
+                "squizlabs/php_codesniffer": "*"
+            },
+            "require-dev": {
+                "ergebnis/composer-normalize": "*"
+            },
+            "type": "metapackage",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "Chris Burgess",
+                    "email": "chrisburgess@catalyst.net.nz"
+                }
+            ],
+            "description": "Suggested packages for Drupal development.",
+            "time": "2020-11-18T19:25:03+13:00"
         },
         {
             "name": "zaporylie/composer-drupal-optimizations",

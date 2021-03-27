@@ -21,6 +21,10 @@
         "asset-packagist": {
             "type": "composer",
             "url": "https://asset-packagist.org"
+        },
+        "xurizaemon/drupal-suggested": {
+            "type": "vcs",
+            "url": "https://gitlab.com/xurizaemon/drupal-suggested.git"
         }
     },
     "config": {
@@ -44,7 +48,8 @@
         "webmozart/path-util": "^2.3"
     },
     "require-dev": {
-        "drupal/core-dev": "^8.9.0"
+        "drupal/core-dev": "^8.9.0",
+        "xurizaemon/drupal-suggested": "^0.0.6"
     },
     "conflict": {
         "drupal/drupal": "*"
