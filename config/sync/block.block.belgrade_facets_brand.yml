@@ -1,0 +1,28 @@
+uuid: 1e7847dd-e340-4f20-a471-537a9fd32b2a
+langcode: en
+status: true
+dependencies:
+  config:
+    - facets.facet.brand
+  module:
+    - facets
+    - system
+  theme:
+    - belgrade
+id: belgrade_facets_brand
+theme: belgrade
+region: sidebar_first
+weight: 0
+provider: null
+plugin: 'facet_block:brand'
+settings:
+  id: 'facet_block:brand'
+  label: Brand
+  provider: facets
+  label_display: visible
+visibility:
+  request_path:
+    id: request_path
+    pages: "/products\r\n/products/*"
+    negate: false
+    context_mapping: {  }

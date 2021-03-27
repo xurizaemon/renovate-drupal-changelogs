@@ -1,0 +1,71 @@
+uuid: a9cf5256-86df-4d9c-9b33-3ab44a9b148f
+langcode: en
+status: true
+dependencies:
+  config:
+    - commerce_product.commerce_product_type.clothing
+    - field.field.commerce_product.clothing.body
+    - field.field.commerce_product.clothing.field_brand
+    - field.field.commerce_product.clothing.field_product_categories
+    - field.field.commerce_product.clothing.field_special_categories
+  module:
+    - commerce_cart_flyout
+    - text
+_core:
+  default_config_hash: LV5i26v71h86_qfYyEprjV-5tCcslsTk8RIyWnfwaf8
+id: commerce_product.clothing.default
+targetEntityType: commerce_product
+bundle: clothing
+mode: default
+content:
+  body:
+    label: hidden
+    type: text_default
+    weight: 2
+    settings: {  }
+    third_party_settings: {  }
+    region: content
+  field_brand:
+    weight: 1
+    label: hidden
+    settings:
+      link: false
+    third_party_settings: {  }
+    type: entity_reference_label
+    region: content
+  field_product_categories:
+    weight: 4
+    label: hidden
+    settings:
+      link: false
+    third_party_settings: {  }
+    type: entity_reference_label
+    region: content
+  field_special_categories:
+    weight: 5
+    label: hidden
+    settings:
+      link: false
+    third_party_settings: {  }
+    type: entity_reference_label
+    region: content
+  title:
+    label: hidden
+    type: string
+    weight: 0
+    region: content
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+  variations:
+    type: commerce_cart_flyout_add_to_cart
+    weight: 3
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    region: content
+hidden:
+  created: true
+  search_api_excerpt: true
+  stores: true
+  uid: true

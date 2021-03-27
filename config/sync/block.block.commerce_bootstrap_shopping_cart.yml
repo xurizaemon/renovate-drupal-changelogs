@@ -1,0 +1,23 @@
+uuid: ad9cfc07-f123-455b-8aea-01bcb7a9b882
+langcode: en
+status: false
+dependencies:
+  module:
+    - commerce_cart_flyout
+  theme:
+    - commerce_bootstrap
+id: commerce_bootstrap_shopping_cart
+theme: commerce_bootstrap
+region: navigation
+weight: -5
+provider: null
+plugin: commerce_cart
+settings:
+  id: commerce_cart
+  label: 'Shopping Cart'
+  provider: commerce_cart
+  label_display: '0'
+  use_quantity_count: false
+  dropdown: true
+  item_text: items
+visibility: {  }

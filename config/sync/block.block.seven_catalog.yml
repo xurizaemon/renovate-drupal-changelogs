@@ -1,0 +1,25 @@
+uuid: 7d580c21-10f4-4f37-9cfa-a62d17dfa4e4
+langcode: en
+status: false
+dependencies:
+  config:
+    - system.menu.catalog
+  module:
+    - system
+  theme:
+    - seven
+id: seven_catalog
+theme: seven
+region: header
+weight: -6
+provider: null
+plugin: 'system_menu_block:catalog'
+settings:
+  id: catalog_footer
+  label: Catalog
+  provider: system
+  label_display: '0'
+  level: 1
+  depth: 0
+  expand_all_items: false
+visibility: {  }
