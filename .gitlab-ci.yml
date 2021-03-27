@@ -1,0 +1,85 @@
+image: mogtofu33/drupal8ci:3.x-dev-8.9
+
+stages:
+  - build
+  - lint
+  - test
+  - check
+
+.cache_strategy_push:
+  cache:
+    key: ${CI_COMMIT_SHA}
+    paths:
+      - vendor
+      - web/core
+      - web/libraries
+      - web/modules/contrib
+      - web/profiles/contrib
+      - web/themes/contrib
+
+.cache_strategy_pull:
+  extends: .cache_strategy_push
+  cache:
+    policy: pull
+
+build drupal:
+  extends: .cache_strategy_push
+  stage: build
+  tags:
+    - docker
+  before_script:
+    - export PATH=$PATH:$( pwd )/vendor/bin
+  script:
+    - composer install --quiet
+  artifacts:
+    when: always
+    name: "artifacts-${CI_JOB_NAME}-${CI_COMMIT_SHA}"
+    paths:
+      - vendor
+      - web
+
+lint drupal:
+  extends: .cache_strategy_push
+  stage: lint
+  needs:
+    - build drupal
+  tags:
+    - docker
+  before_script:
+    - export PATH=$PATH:$( pwd )/vendor/bin
+  script:
+    - php vendor/bin/grumphp run --testsuite=ci
+
+# Symfony security-checker report.
+security-checker:
+  extends: .cache_strategy_pull
+  stage: check
+  tags:
+    - docker
+  needs:
+    - build drupal
+  before_script:
+    - PHP_SC_VERSION=$(curl -s "https://api.github.com/repos/fabpot/local-php-security-checker/releases/latest" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/;s/^v//')
+    - curl -LSs https://github.com/fabpot/local-php-security-checker/releases/download/v${PHP_SC_VERSION}/local-php-security-checker_${PHP_SC_VERSION}_linux_amd64 > ./php-security-checker
+    - chmod +x ./php-security-checker
+  script:
+    - mkdir -p report-${CI_JOB_NAME}
+    - ./php-security-checker security:check composer.lock --no-ansi | tee report-${CI_JOB_NAME}/report.txt
+  # Allow failure to produce report and warning when we have an error.
+  allow_failure: true
+
+# Composer outdated package check.
+composer-outdated:
+  extends: .cache_strategy_pull
+  stage: check
+  tags:
+    - docker
+  before_script:
+    - export PATH=$PATH:$( pwd )/vendor/bin
+  needs:
+    - build drupal
+  script:
+    - mkdir -p report-${CI_JOB_NAME}
+    - composer outdated --no-ansi | tee report-${CI_JOB_NAME}/report.txt
+  # Allow failure to produce report and warning when we have an error.
+  allow_failure: true
