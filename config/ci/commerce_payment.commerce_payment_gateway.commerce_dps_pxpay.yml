@@ -1,0 +1,22 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - commerce_dps
+id: commerce_dps_pxpay
+label: 'Commerce DPS PxPay'
+weight: null
+plugin: dps_pxpay
+configuration:
+  px_user: COMMERCE_DPS_PX_USERID
+  px_key: COMMERCE_DPS_PX_KEY
+  px_ref_prefix: 'Website Order'
+  pxpay_integration_method: redirect
+  pxpay_iframe_attributes: 'width="100%" height="750" frameborder="0"'
+  display_label: 'Credit Card (PxPay)'
+  mode: live
+  payment_method_types:
+    - credit_card
+  collect_billing_information: true
+conditions: {  }
+conditionOperator: AND
