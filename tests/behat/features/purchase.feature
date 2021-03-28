@@ -20,8 +20,10 @@ Feature: purchase
     And I fill in "City" with "Everywhere"
     And I fill in "Postal code" with "1234"
     Then I press "Recalculate shipping"
+    Then I save screenshot
     And I wait for AJAX to finish
     And I fill in "CVV" with "123"
     Then I press "Continue to review"
+    Then I save screenshot
     Then I press "Pay and complete purchase"
     Then I save screenshot
