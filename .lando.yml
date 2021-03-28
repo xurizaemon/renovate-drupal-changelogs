@@ -5,7 +5,7 @@ config:
 services:
   appserver:
     webroot: web
-    xdebug: debug
+    xdebug: off
     config:
       php: .lando/php.ini
 tooling:
