@@ -64,10 +64,10 @@ test behat:
     DRUPAL_ENVIRONMENT: ci
   before_script:
     - mkdir tmp
-    - php -i > tmp/php.txt
+    - php -i > tmp/php-info.txt
     - export PATH=$PATH:$( pwd )/vendor/bin
     - google-chrome --disable-gpu --headless --remote-debugging-address=0.0.0.0 --remote-debugging-port=9222 --window-size=1280,1080 --no-sandbox --disable-web-security --disable-site-isolation-trials --user-data-dir=/tmp &> tmp/chromedriver-log.txt &
-    - curl -s http://localhost:9222/json/version -o tmp/chrome-version.txt || true
+    - curl -s http://127.0.0.1:9222/json/version -o tmp/chrome-version.txt || true
     - drush site-install commerce_kickstart --site-name='Commerce Demo' --no-interaction --db-url=sqlite://sites/default/files/db.sqlite
     - php -S $HOST_PORT -t ./web &> tmp/php-log.txt &
     - until curl -s http://$HOST_PORT; do true; done > /dev/null

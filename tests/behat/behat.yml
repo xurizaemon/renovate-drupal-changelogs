@@ -38,7 +38,7 @@ default:
     pretty:
       output_decorate: true
     junit:
-      output_path: 'reports/junit'
+      output_path: '%paths.base%/../reports/junit'
 
 ci:
   suites:
@@ -55,9 +55,7 @@ ci:
     IntegratedExperts\BehatScreenshotExtension:
       dir: '%paths.base%/../../screenshots'
   formatters:
-    pretty:
-      output_decorate: true
     junit:
-      output_path: 'reports/junit'
+      output_path: '%paths.base%/../../reports/junit'
 
 
