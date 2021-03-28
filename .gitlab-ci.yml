@@ -69,8 +69,8 @@ test behat:
     - google-chrome --disable-gpu --headless --remote-debugging-address=0.0.0.0 --remote-debugging-port=9222 --window-size=1280,1080 --no-sandbox --disable-web-security --disable-site-isolation-trials --user-data-dir=/tmp &> tmp/chromedriver-log.txt &
     - curl -s http://127.0.0.1:9222/json/version -o tmp/chrome-version.txt || true
     - drush site-install commerce_kickstart --site-name='Commerce Demo' --no-interaction --db-url=sqlite://sites/default/files/db.sqlite
-    - perl -pi -e "s#COMMERCE_DPS_PX_KEY#${COMMERCE_DPS_PX_KEY}#" config/ci/*yml
-    - perl -pi -e "s#COMMERCE_DPS_PX_USERID#${COMMERCE_DPS_PX_USERID}#" config/ci/*yml
+    - sed -i "s/COMMERCE_DPS_PX_USERID/$COMMERCE_DPS_PX_USERID/g" config/ci/*yml
+    - sed -i "s/COMMERCE_DPS_PX_KEY/$COMMERCE_DPS_PX_KEY/g" config/ci/*yml
     - drush -y pm:enable commerce_dps
     - drush -y config:import --partial --source=../config/ci
     - php -S $HOST_PORT -t ./web &> tmp/php-log.txt &
@@ -83,9 +83,10 @@ test behat:
     when: always
     name: "artifacts-${CI_JOB_NAME}-${CI_COMMIT_SHA}"
     paths:
-      - tmp
       - web/sites/default
       - reports
+      - screenshots
+      - tmp
     reports:
       junit: reports/junit/*.xml
 

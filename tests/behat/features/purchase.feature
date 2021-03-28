@@ -20,10 +20,21 @@ Feature: purchase
     And I fill in "City" with "Everywhere"
     And I fill in "Postal code" with "1234"
     Then I press "Recalculate shipping"
-    Then I save screenshot
     And I wait for AJAX to finish
-    And I fill in "CVV" with "123"
+    And I select the radio button "Credit Card (PxPay)"
+    And I wait 1 second
     Then I press "Continue to review"
-    Then I save screenshot
     Then I press "Pay and complete purchase"
-    Then I save screenshot
+    And I wait 2 seconds
+    # This is the PxPay hosted form.
+    Then I fill in "Name On Card" with "Behat Anonymous"
+    And I fill in "Card Number:" with "4111111111111111"
+    And I fill in "CVC:" with "111"
+    And I select "12" from "Expiry Date (MM)"
+    And I select "31" from "Expiry Date (YY)"
+    And I press "Submit"
+    And I wait for AJAX to finish
+    And I click "Next"
+    # Back on Drupal now.
+    Then I should see the text "Your order number is"
+    And I save screenshot

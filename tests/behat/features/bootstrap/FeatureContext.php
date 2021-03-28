@@ -20,4 +20,26 @@ class FeatureContext extends RawDrupalContext {
   public function __construct() {
   }
 
+  /**
+   * @Given /^I wait (\d+) seconds?$/
+   */
+  public function iWaitSeconds($seconds) {
+    sleep($seconds);
+  }
+
+  /**
+   * Stop execution until you hit enter in the console.
+   *
+   * @see https://stackoverflow.com/questions/45423591/how-to-stop-behat-tests-in-the-middle-to-run-element-inspector
+   *
+   * @Then /^pause/
+   * @Then /^I pause/
+   */
+  public function pause() {
+    fwrite(STDOUT, "\033[s    \033[93m[Breakpoint] Press \033[1;93m[RETURN]\033[0;93m to continue...\033[0m");
+    while (fgets(STDIN, 1024) == '') {}
+    fwrite(STDOUT, "\033[u");
+    return;
+  }
+
 }
