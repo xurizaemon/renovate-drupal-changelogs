@@ -1,2 +1,47 @@
 grumphp:
-    tasks: {  }
+  git_hook_variables:
+    VAGRANT_HOST_DIR: .
+    VAGRANT_PROJECT_DIR: /vagrant
+    EXEC_GRUMPHP_COMMAND: exec
+    # All defined tasks would run by default.
+  tasks:
+    composer:
+      file: ./composer.json
+      no_check_all: false
+      no_check_lock: false
+      no_check_publish: false
+      no_local_repository: false
+      with_dependencies: false
+      strict: false
+    phpcs:
+      standard:
+        - vendor/drupal/coder/coder_sniffer/Drupal
+        - vendor/drupal/coder/coder_sniffer/DrupalPractice
+      warning_severity: 0
+      whitelist_patterns:
+        - /web\/modules\/custom\/(.*)/
+        - /web\/themes\/custom\/(.*)/
+        - /web\/modules\/contrib\/commerce_dps/
+      ignore_patterns:
+        - /vendor/
+      triggered_by:
+        - inc
+        - install
+        - md
+        - module
+        - php
+        - profile
+        - test
+        - txt
+        - theme
+        - yml
+    securitychecker_enlightn:
+        lockfile: ./composer.lock
+        run_always: false
+  # Sub-set of tasks defined above.
+  testsuites:
+    ci:
+      tasks:
+        - composer
+        - phpcs
+        # - securitychecker
