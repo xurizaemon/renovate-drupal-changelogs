@@ -7,4 +7,8 @@ services:
     webroot: web
     xdebug: debug
     config:
-      php: .lando.php.ini
+      php: .lando/php.ini
+tooling:
+  test:
+    service: appserver
+    cmd: "cp /app/web/core/phpunit.xml.dist /app/phpunit.xml && php /app/vendor/bin/phpunit -c /app/phpunit.xml"
