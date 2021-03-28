@@ -94,7 +94,7 @@ test behat:
 # Symfony security-checker report.
 security-checker:
   extends: .cache_strategy_pull
-  stage: check
+  stage: lint
   tags:
     - docker
   needs:
@@ -108,4 +108,6 @@ security-checker:
     - ./php-security-checker security:check composer.lock --no-ansi | tee report-${CI_JOB_NAME}/report.txt
   # Allow failure to produce report and warning when we have an error.
   allow_failure: true
-  # when: manual
+  only:
+    - main
+    - merge_requests
