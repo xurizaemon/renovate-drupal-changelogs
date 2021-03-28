@@ -109,20 +109,3 @@ security-checker:
   # Allow failure to produce report and warning when we have an error.
   allow_failure: true
   # when: manual
-
-# Composer outdated package check.
-composer-outdated:
-  extends: .cache_strategy_pull
-  stage: check
-  tags:
-    - docker
-  before_script:
-    - export PATH=$PATH:$( pwd )/vendor/bin
-  needs:
-    - build drupal
-  script:
-    - mkdir -p report-${CI_JOB_NAME}
-    - composer outdated --no-ansi | tee report-${CI_JOB_NAME}/report.txt
-  # Allow failure to produce report and warning when we have an error.
-  allow_failure: true
-  # when: manual
