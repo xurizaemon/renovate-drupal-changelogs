@@ -1,0 +1,63 @@
+default:
+  suites:
+    default:
+      paths:
+        - '%paths.base%/features'
+      contexts:
+        - FeatureContext
+        - Drupal\DrupalExtension\Context\DrupalContext
+        - Drupal\DrupalExtension\Context\MinkContext
+        - Drupal\DrupalExtension\Context\MessageContext
+        - Drupal\DrupalExtension\Context\DrushContext
+        - IntegratedExperts\BehatScreenshotExtension\Context\ScreenshotContext
+  extensions:
+    DMore\ChromeExtension\Behat\ServiceContainer\ChromeExtension:
+    Drupal\DrupalExtension:
+      api_driver: 'drupal'
+      drupal:
+        drupal_root: '%paths.base%/../../web'
+      drush:
+        root: '%paths.base%/../../web'
+      blackbox: ~
+    Drupal\MinkExtension:
+      ajax_timeout: 5
+      browser_name: chrome
+      base_url: http://commerce-demo.lndo.site/
+      sessions:
+        default:
+          chrome:
+            socket_timeout: 60
+            api_url: "http://chrome:9222"
+            dom_wait_timeout: 5000
+    # Allows to capture HTML and JPG screenshots (based on the driver used).
+    IntegratedExperts\BehatScreenshotExtension:
+      dir: '%paths.base%/../screenshots'
+      fail: true
+      purge: true
+  formatters:
+    pretty:
+      output_decorate: true
+    junit:
+      output_path: 'reports/junit'
+
+ci:
+  suites:
+    default:
+      paths:
+        - '%paths.base%/features'
+  extensions:
+    Drupal\MinkExtension:
+      base_url: http://0.0.0.0:80
+      sessions:
+        default:
+          chrome:
+            api_url: "http://localhost:9222"
+    IntegratedExperts\BehatScreenshotExtension:
+      dir: '%paths.base%/../../screenshots'
+  formatters:
+    pretty:
+      output_decorate: true
+    junit:
+      output_path: 'reports/junit'
+
+

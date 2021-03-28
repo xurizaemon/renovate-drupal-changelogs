@@ -48,6 +48,9 @@
     },
     "require-dev": {
         "drupal/core-dev": "^8.9.0",
+        "integratedexperts/behat-format-progress-fail": "^0.2.1",
+        "integratedexperts/behat-screenshot": "^0.7.3",
+        "integratedexperts/behat-steps": "^0.2.2",
         "xurizaemon/drupal-suggested": "^0.0.6"
     },
     "conflict": {

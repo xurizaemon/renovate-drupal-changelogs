@@ -8,7 +8,22 @@ services:
     xdebug: off
     config:
       php: .lando/php.ini
+  chrome:
+    type: compose
+    services:
+      image: quay.io/pantheon-public/build-tools-ci:6.x
+      user: root
+      ports:
+        - '9222'
+      command: "google-chrome --disable-gpu --headless --remote-debugging-address=0.0.0.0 --remote-debugging-port=9222 --no-sandbox --window-size=1080,1920 </dev/null"
+      environment:
+        SITE_URL: https://commerce-demo.lndo.site
+        NODE_EXTRA_CA_CERTS: /user/.lando/certs/lndo.site.pem
 tooling:
-  test:
+  phpunit:
     service: appserver
     cmd: "cp /app/web/core/phpunit.xml.dist /app/phpunit.xml && php /app/vendor/bin/phpunit -c /app/phpunit.xml"
+  behat:
+    service: appserver
+    description: Run Behat
+    cmd: /app/vendor/bin/behat -c /app/tests/behat/behat.yml
