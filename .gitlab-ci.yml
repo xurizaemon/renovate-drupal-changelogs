@@ -74,6 +74,7 @@ test behat:
     - drush -y pm:enable commerce_dps
     - drush -y config:import --partial --source=../config/ci
     - php -S $HOST_PORT -t ./web &> tmp/php-log.txt &
+    - drush -y cron
     - until curl -s http://$HOST_PORT; do true; done > /dev/null
     - curl -o tmp/index.html -s http://$HOST_PORT
     - cd tests/behat
