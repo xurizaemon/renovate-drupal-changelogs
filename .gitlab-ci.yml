@@ -91,9 +91,8 @@ test behat:
     reports:
       junit: reports/junit/*.xml
 
-
 # Symfony security-checker report.
-security-checker:
+security check:
   extends: .cache_strategy_pull
   stage: lint
   tags:
@@ -111,4 +110,3 @@ security-checker:
   allow_failure: true
   only:
     - main
-    - merge_requests
