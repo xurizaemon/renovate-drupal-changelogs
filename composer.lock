@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "eebda959bb413862471fd6cab5ee3224",
+    "content-hash": "4e8762a5e83d30c9c884864e941989af",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -3042,11 +3042,11 @@
         },
         {
             "name": "drupal/commerce_dps",
-            "version": "2.0.x-dev",
+            "version": "2.0.0-beta1",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/commerce_dps.git",
-                "reference": "e077bb9ad04578549305b736d6f45ea22a8016e9"
+                "reference": "b65e92075a7e3c0f4e6bea6e04068b5f24bce76b"
             },
             "require": {
                 "drupal/commerce": "~2",
@@ -3059,7 +3059,7 @@
             ],
             "description": "Provides Commerce integration for DPS.",
             "homepage": "http://drupal.org/project/commerce_dps",
-            "time": "2021-03-27T10:14:04+00:00"
+            "time": "2021-03-31T06:36:43+00:00"
         },
         {
             "name": "drupal/commerce_number_pattern",
@@ -11171,29 +11171,27 @@
         },
         {
             "name": "dmore/chrome-mink-driver",
-            "version": "2.8.0",
+            "version": "2.7.0",
             "source": {
                 "type": "git",
                 "url": "https://gitlab.com/DMore/chrome-mink-driver.git",
-                "reference": "f85c8f86ca2e9000119c310577a6942683f7e280"
+                "reference": "d66765fb7f448e8b2bca2b899308a4a6d8a69264"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://gitlab.com/api/v4/projects/DMore%2Fchrome-mink-driver/repository/archive.zip?sha=f85c8f86ca2e9000119c310577a6942683f7e280",
-                "reference": "f85c8f86ca2e9000119c310577a6942683f7e280",
+                "url": "https://gitlab.com/api/v4/projects/DMore%2Fchrome-mink-driver/repository/archive.zip?sha=d66765fb7f448e8b2bca2b899308a4a6d8a69264",
+                "reference": "d66765fb7f448e8b2bca2b899308a4a6d8a69264",
                 "shasum": ""
             },
             "require": {
                 "behat/mink": "^1.7",
                 "ext-curl": "*",
                 "ext-json": "*",
-                "ext-mbstring": "*",
                 "textalk/websocket": "^1.2.0"
             },
             "require-dev": {
                 "mink/driver-testsuite": "dev-master",
-                "phpunit/phpunit": "^5.0.0",
-                "squizlabs/php_codesniffer": "^3.5"
+                "phpunit/phpunit": "^5.0.0"
             },
             "type": "library",
             "extra": {
@@ -11217,10 +11215,7 @@
                 }
             ],
             "description": "Mink driver for controlling chrome without selenium",
-            "support": {
-                "issues": "https://gitlab.com/api/v4/projects/3255077/issues"
-            },
-            "time": "2021-04-25T06:49:32+00:00"
+            "time": "2019-03-30T09:22:58+00:00"
         },
         {
             "name": "doctrine/instantiator",
@@ -14369,13 +14364,54 @@
             ],
             "description": "Suggested packages for Drupal development.",
             "time": "2020-11-18T19:25:03+13:00"
+        },
+        {
+            "name": "zaporylie/composer-drupal-optimizations",
+            "version": "1.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/zaporylie/composer-drupal-optimizations.git",
+                "reference": "a7f409a765164fd13ac0bd00e19109165c51b369"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/zaporylie/composer-drupal-optimizations/zipball/a7f409a765164fd13ac0bd00e19109165c51b369",
+                "reference": "a7f409a765164fd13ac0bd00e19109165c51b369",
+                "shasum": ""
+            },
+            "require": {
+                "composer-plugin-api": "^1.1 || ^2.0"
+            },
+            "require-dev": {
+                "composer/composer": "^1.6",
+                "phpunit/phpunit": "^6"
+            },
+            "type": "composer-plugin",
+            "extra": {
+                "class": "zaporylie\\ComposerDrupalOptimizations\\Plugin"
+            },
+            "autoload": {
+                "psr-4": {
+                    "zaporylie\\ComposerDrupalOptimizations\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "Jakub Piasecki",
+                    "email": "jakub@piaseccy.pl"
+                }
+            ],
+            "description": "Composer plugin to improve composer performance for Drupal projects",
+            "time": "2020-10-22T13:26:00+00:00"
         }
     ],
     "aliases": [],
     "minimum-stability": "dev",
-    "stability-flags": {
-        "drupal/commerce_dps": 20
-    },
+    "stability-flags": [],
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
@@ -14383,5 +14419,5 @@
         "ext-curl": "*"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.0.0"
+    "plugin-api-version": "1.1.0"
 }

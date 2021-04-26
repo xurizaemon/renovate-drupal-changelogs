@@ -37,7 +37,7 @@
         "centarro/commerce_kickstart": "^3.0.0",
         "composer/installers": "^1.2",
         "cweagans/composer-patches": "^1.7",
-        "drupal/commerce_dps": "2.0.x-dev@dev",
+        "drupal/commerce_dps": "~2.0.0",
         "drupal/core": "^8.9.0",
         "drupal/core-composer-scaffold": "^8.9.0",
         "drupal/devel": "^4.1",
