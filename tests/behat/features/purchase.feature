@@ -20,9 +20,10 @@ Feature: purchase
     And I fill in "City" with "Everywhere"
     And I fill in "Postal code" with "9010"
     Then I press "Recalculate shipping"
+    And I wait 2 seconds
     And I wait for AJAX to finish
     And I select the radio button "Credit Card (PxPay)"
-    And I wait 1 second
+    And I wait 2 seconds
     Then I press "Continue to review"
     Then I press "Pay and complete purchase"
     And I wait 2 seconds
