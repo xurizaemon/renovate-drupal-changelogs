@@ -18,7 +18,7 @@ Feature: purchase
     And I fill in "Last name" with "Lastname"
     And I fill in "Street address" with "123 Example Street"
     And I fill in "City" with "Everywhere"
-    And I fill in "Postal code" with "1234"
+    And I fill in "Postal code" with "9010"
     Then I press "Recalculate shipping"
     And I wait for AJAX to finish
     And I select the radio button "Credit Card (PxPay)"
