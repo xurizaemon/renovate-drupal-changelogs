@@ -1,3 +1,7 @@
 {
-    "patches": {}
+    "patches": {
+      "drupal/core": {
+        "#2982052: Allow install hook profiles installing from configuration": "https://www.drupal.org/files/issues/2021-06-11/2982052-68-Allow_install_hook_profiles_installing_from_configuration.patch"
+      }
+    }
 }

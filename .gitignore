@@ -6,10 +6,11 @@
 /web/modules/contrib/
 /web/themes/contrib/
 /web/profiles/contrib/
+/web/libraries/
 
 # Ignore sensitive information
-/web/sites/*/settings.php
 /web/sites/*/settings.local.php
+.env
 
 # Ignore Drupal's file directory
 /web/sites/*/files/

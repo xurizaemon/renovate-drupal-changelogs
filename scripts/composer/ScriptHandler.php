@@ -9,6 +9,7 @@ namespace DrupalProject\composer;
 
 use Composer\Script\Event;
 use Composer\Semver\Comparator;
+use Drupal\Core\Site\Settings;
 use DrupalFinder\DrupalFinder;
 use Symfony\Component\Filesystem\Filesystem;
 use Webmozart\PathUtil\Path;
@@ -40,23 +41,12 @@ class ScriptHandler {
       $fs->copy($drupalRoot . '/sites/default/default.settings.php', $drupalRoot . '/sites/default/settings.php');
       require_once $drupalRoot . '/core/includes/bootstrap.inc';
       require_once $drupalRoot . '/core/includes/install.inc';
-      $settings['config_directories'] = [
-        CONFIG_SYNC_DIRECTORY => (object) [
-          'value' => Path::makeRelative($drupalFinder->getComposerRoot() . '/config/sync', $drupalRoot),
-          'required' => TRUE,
-        ],
-      ];
-
-      // Workaround for Bootstrap https://www.drupal.org/project/bootstrap/issues/2667062
-      $settings['settings']['maintenance_theme'] = (object) [
-        'value' => 'seven',
+      new Settings([]);
+      $settings['settings']['config_sync_directory'] = (object) [
+        'value' => Path::makeRelative($drupalFinder->getComposerRoot() . '/config/sync', $drupalRoot),
         'required' => TRUE,
       ];
-
-      // When writing $settings[], an existing Settings instance needs to exist.
-      new \Drupal\Core\Site\Settings([]);
       drupal_rewrite_settings($settings, $drupalRoot . '/sites/default/settings.php');
-
       $fs->chmod($drupalRoot . '/sites/default/settings.php', 0666);
       $event->getIO()->write("Created a sites/default/settings.php file with chmod 0666");
     }

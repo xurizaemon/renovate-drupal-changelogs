@@ -2,8 +2,12 @@ name: commerce-demo
 recipe: drupal9
 config:
   webroot: web
+env_file:
+  - defaults.env
+  - .env
 services:
   appserver:
+    type: php:7.4
     composer_version: 2
     webroot: web
     xdebug: off
@@ -21,10 +25,18 @@ services:
         SITE_URL: https://commerce-demo.lndo.site
         NODE_EXTRA_CA_CERTS: /user/.lando/certs/lndo.site.pem
 tooling:
-  phpunit:
-    service: appserver
-    cmd: "cp /app/web/core/phpunit.xml.dist /app/phpunit.xml && php /app/vendor/bin/phpunit -c /app/phpunit.xml"
   behat:
     service: appserver
     description: Run Behat
     cmd: /app/vendor/bin/behat -c /app/tests/behat/behat.yml
+  phpunit:
+    service: appserver
+    cmd: "cp /app/web/core/phpunit.xml.dist /app/phpunit.xml && php /app/vendor/bin/phpunit -c /app/phpunit.xml"
+  site-install:
+    service: appserver
+    cmd:
+    - drush site-install --no-interaction commerce_kickstart
+    - drush -y pm:enable commerce_dps commerce_demo
+    - drush --yes config:set symfony_mailer.settings default_transport --value=ddev_smtp
+    - drush -y config:import --partial --source=../config/ci
+    - drush uli

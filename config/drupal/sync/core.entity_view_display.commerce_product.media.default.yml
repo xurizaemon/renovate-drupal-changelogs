@@ -1,0 +1,63 @@
+uuid: 74743626-c6aa-43b5-9580-1ce57818f788
+langcode: en
+status: true
+dependencies:
+  config:
+    - commerce_product.commerce_product_type.media
+    - field.field.commerce_product.media.body
+    - field.field.commerce_product.media.images
+    - field.field.commerce_product.media.product_brand
+    - field.field.commerce_product.media.product_collections
+    - field.field.commerce_product.media.product_tags
+    - image.style.large
+  module:
+    - commerce_product
+    - image
+    - text
+_core:
+  default_config_hash: eJlzXQWePEMED7X3nWH3xxXnkQ0JZD_zdmLVNGccesA
+id: commerce_product.media.default
+targetEntityType: commerce_product
+bundle: media
+mode: default
+content:
+  body:
+    type: text_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 2
+    region: content
+  images:
+    type: image
+    label: hidden
+    settings:
+      image_link: ''
+      image_style: large
+    third_party_settings: {  }
+    weight: 1
+    region: content
+  title:
+    type: string
+    label: hidden
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  variations:
+    type: commerce_add_to_cart
+    label: hidden
+    settings:
+      combine: true
+    third_party_settings: {  }
+    weight: 3
+    region: content
+hidden:
+  created: true
+  product_brand: true
+  product_collections: true
+  product_tags: true
+  search_api_excerpt: true
+  stores: true
+  uid: true

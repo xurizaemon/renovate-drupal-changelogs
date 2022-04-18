@@ -1,0 +1,22 @@
+uuid: 9f79cf95-56f0-4a9f-8a65-fc8c9b51e49d
+langcode: en
+status: true
+dependencies:
+  module:
+    - system
+  theme:
+    - centarro_claro
+_core:
+  default_config_hash: FdXl2qtoXTyCFiulwQ6vaeT72GG5c4BvlmlzY8-2Egk
+id: centarro_claro_content
+theme: centarro_claro
+region: content
+weight: 0
+provider: null
+plugin: system_main_block
+settings:
+  id: system_main_block
+  label: 'Main page content'
+  label_display: '0'
+  provider: system
+visibility: {  }

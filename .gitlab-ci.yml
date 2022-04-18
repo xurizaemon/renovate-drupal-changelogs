@@ -22,6 +22,12 @@ stages:
   cache:
     policy: pull
 
+.drupal_in_ci:
+  extends: .cache_strategy_pull
+  services:
+     - name: mailhog/mailhog
+       alias: mailhog
+
 build drupal:
   extends: .cache_strategy_push
   stage: build
@@ -51,9 +57,8 @@ lint drupal:
     - php vendor/bin/grumphp run --testsuite=ci
   # when: manual
 
-# Behat test run.
-test behat:
-  extends: .cache_strategy_pull
+Behat:
+  extends: .drupal_in_ci
   stage: test
   needs:
     - build drupal
@@ -62,6 +67,7 @@ test behat:
   variables:
     HOST_PORT: "0.0.0.0:80"
     DRUPAL_ENVIRONMENT: ci
+    BEHAT_TAGS: "~@skipped"
   before_script:
     - mkdir tmp
     - php -i > tmp/php-info.txt
@@ -69,17 +75,17 @@ test behat:
     - google-chrome --disable-gpu --headless --remote-debugging-address=0.0.0.0 --remote-debugging-port=9222 --window-size=1280,1080 --no-sandbox --disable-web-security --disable-site-isolation-trials --user-data-dir=/tmp &> tmp/chromedriver-log.txt &
     - curl -s http://127.0.0.1:9222/json/version -o tmp/chrome-version.txt || true
     - drush site-install commerce_kickstart --site-name='Commerce Demo' --no-interaction --db-url=sqlite://sites/default/files/db.sqlite
-    - sed -i "s/COMMERCE_DPS_PX_USERID/$COMMERCE_DPS_PX_USERID/g" config/ci/*yml
-    - sed -i "s/COMMERCE_DPS_PX_KEY/$COMMERCE_DPS_PX_KEY/g" config/ci/*yml
-    - drush -y pm:enable commerce_dps
-    - drush -y config:import --partial --source=../config/ci
+    - drush -y pm:enable commerce_dps commerce_demo
+    - drush -y config:import --partial --source=../config/drupal/ci
     - php -S $HOST_PORT -t ./web &> tmp/php-log.txt &
     - drush -y cron
     - until curl -s http://$HOST_PORT; do true; done > /dev/null
     - curl -o tmp/index.html -s http://$HOST_PORT
     - cd tests/behat
   script:
-    - behat --colors -p ci
+    - behat --colors --profile ci
+  after_script:
+    - COLUMNS=240 ./vendor/bin/drush watchdog:show --count=50000 > ${CI_PROJECT_DIR}/tmp/drupal-log-messages.txt
   artifacts:
     when: always
     name: "artifacts-${CI_JOB_NAME}-${CI_COMMIT_SHA}"
@@ -91,17 +97,8 @@ test behat:
     reports:
       junit: reports/junit/*.xml
 
-# Behat test run using dev branch.
-test behat dev:
-  extends: .cache_strategy_pull
-  stage: test
-  needs:
-    - build drupal
-  tags:
-    - docker
-  variables:
-    HOST_PORT: "0.0.0.0:80"
-    DRUPAL_ENVIRONMENT: ci
+Behat - 2.0.x-dev:
+  extends: Behat
   before_script:
     - mkdir tmp
     - php -i > tmp/php-info.txt
@@ -110,28 +107,62 @@ test behat dev:
     - google-chrome --disable-gpu --headless --remote-debugging-address=0.0.0.0 --remote-debugging-port=9222 --window-size=1280,1080 --no-sandbox --disable-web-security --disable-site-isolation-trials --user-data-dir=/tmp &> tmp/chromedriver-log.txt &
     - curl -s http://127.0.0.1:9222/json/version -o tmp/chrome-version.txt || true
     - drush site-install commerce_kickstart --site-name='Commerce Demo' --no-interaction --db-url=sqlite://sites/default/files/db.sqlite
-    - sed -i "s/COMMERCE_DPS_PX_USERID/$COMMERCE_DPS_PX_USERID/g" config/ci/*yml
-    - sed -i "s/COMMERCE_DPS_PX_KEY/$COMMERCE_DPS_PX_KEY/g" config/ci/*yml
-    - drush -y pm:enable commerce_dps
-    - drush -y config:import --partial --source=../config/ci
+    - drush -y pm:enable commerce_dps commerce_demo
+    - drush -y config:import --partial --source=../config/drupal/ci
+    - php -S $HOST_PORT -t ./web &> tmp/php-log.txt &
+    - drush -y cron
+    - until curl -s http://$HOST_PORT; do true; done > /dev/null
+    - curl -o tmp/index.html -s http://$HOST_PORT
+    - cd tests/behat
+
+Behat Chrome latest:
+  extends: Behat
+  before_script:
+    - mkdir tmp
+    - php -i > tmp/php-info.txt
+    - export PATH=$PATH:$( pwd )/vendor/bin
+    - composer require dmore/chrome-mink-driver:"dev-main as 2.9.0" dmore/behat-chrome-extension:"dev-main as 1.5.0"
+    - google-chrome --disable-gpu --headless --remote-debugging-address=0.0.0.0 --remote-debugging-port=9222 --window-size=1280,1080 --no-sandbox --disable-web-security --disable-site-isolation-trials --user-data-dir=/tmp &> tmp/chromedriver-log.txt &
+    - curl -s http://127.0.0.1:9222/json/version -o tmp/chrome-version.txt || true
+    - drush site-install commerce_kickstart --site-name='Commerce Demo' --no-interaction --db-url=sqlite://sites/default/files/db.sqlite
+    - drush -y pm:enable commerce_dps commerce_demo
+    - drush -y config:import --partial --source=../config/drupal/ci
+    - php -S $HOST_PORT -t ./web &> tmp/php-log.txt &
+    - drush -y cron
+    - until curl -s http://$HOST_PORT; do true; done > /dev/null
+    - curl -o tmp/index.html -s http://$HOST_PORT
+    - cd tests/behat
+
+.Behat alt:
+  extends: Behat
+  variables:
+    DRUPAL_URL: 0.0.0.0:80
+  services:
+    - name: mailhog/mailhog
+      alias: mailhog
+    - name: mysql:8
+      alias: db
+  before_script:
+    - export PATH="${CI_PROJECT_DIR}/vendor/bin:$PATH"
+    - cp config/gitlab-ci/resources/apache-vhost.conf /etc/apache2/sites-available/00-default.conf
+    - cp config/gitlab-ci/resources/php-config.ini /usr/local/etc/php/conf.d/00-local.ini
+    - php -i > tmp/php-info.txt
+    - apache2ctl start
+    - google-chrome --disable-gpu --headless --remote-debugging-address=0.0.0.0 --remote-debugging-port=9222 --window-size=1280,1080 --no-sandbox --disable-web-security --disable-site-isolation-trials --disable-dev-shm-usage --user-data-dir=/tmp &> tmp/chromedriver-log.txt &
+    - curl -s http://0.0.0.0:9222/json/version | tee tmp/chromium-version.json
+    - chmod -R ugo+rw web/sites/default/files
+    - until curl -s http://$HOST_PORT; do true; done > /dev/null
+    - curl -s http://127.0.0.1:9222/json/version -o tmp/chrome-version.txt || true
+    - drush site-install commerce_kickstart --site-name='Commerce Demo' --no-interaction --db-url=sqlite://sites/default/files/db.sqlite
+    - drush -y pm:enable commerce_dps commerce_demo
+    - drush -y config:import --partial --source=../config/drupal/ci
     - php -S $HOST_PORT -t ./web &> tmp/php-log.txt &
     - drush -y cron
     - until curl -s http://$HOST_PORT; do true; done > /dev/null
     - curl -o tmp/index.html -s http://$HOST_PORT
     - cd tests/behat
   script:
-    - behat --colors -p ci
-  artifacts:
-    when: always
-    name: "artifacts-${CI_JOB_NAME}-${CI_COMMIT_SHA}"
-    paths:
-      - composer.lock
-      - reports
-      - screenshots
-      - tmp
-      - web/sites/default
-    reports:
-      junit: reports/junit/*.xml
+    - behat --colors --profile=ci --tags="${BEHAT_TAGS}"
 
 # Symfony security-checker report.
 security check:
@@ -157,3 +188,4 @@ security check:
       - reports
   only:
     - main
+

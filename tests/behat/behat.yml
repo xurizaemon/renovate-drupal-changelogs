@@ -5,20 +5,25 @@ default:
         - '%paths.base%/features'
       contexts:
         - FeatureContext
+        - Drupal\DrupalExtension\Context\ConfigContext
         - Drupal\DrupalExtension\Context\DrupalContext
-        - Drupal\DrupalExtension\Context\MinkContext
-        - Drupal\DrupalExtension\Context\MessageContext
         - Drupal\DrupalExtension\Context\DrushContext
+        - Drupal\DrupalExtension\Context\MessageContext
+        - Drupal\DrupalExtension\Context\MinkContext
+        - Drupal\DrupalExtension\Context\RandomContext
         - IntegratedExperts\BehatScreenshotExtension\Context\ScreenshotContext
   extensions:
     DMore\ChromeExtension\Behat\ServiceContainer\ChromeExtension:
     Drupal\DrupalExtension:
       api_driver: 'drupal'
+      blackbox: ~
       drupal:
         drupal_root: '%paths.base%/../../web'
       drush:
         root: '%paths.base%/../../web'
-      blackbox: ~
+      region_map:
+        LoginNewCustomer: '#edit-login-register'
+        LoginReturningCustomer: '#edit-login-returning-customer'
     Drupal\MinkExtension:
       ajax_timeout: 5
       browser_name: chrome

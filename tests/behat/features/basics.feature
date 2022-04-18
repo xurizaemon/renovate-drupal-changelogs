@@ -17,11 +17,9 @@ Feature: site-basics
     And drush output should contain "Administrator"
 
   Scenario: Load the front page
-    When I am on "/"
-    Then the response status code should be 200
-    And I should not see "The website encountered an unexpected error."
+    # Commerce Kickstart doesn't get /frontpage view OOTB?
+    Given I set the configuration item "system.site" with key "page.front" to "/user"
 
-  Scenario: Load the front page
     When I am on "/"
     Then the response status code should be 200
     And I should not see "The website encountered an unexpected error."

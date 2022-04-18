@@ -1,6 +1,6 @@
 {
     "name": "xurizaemon/commerce-demo",
-    "description": "Drupal project for commerce-demo, based on drupalcommerce/demo-project",
+    "description": "Demo project for Drupal Commerce",
     "type": "project",
     "license": "GPL-2.0-or-later",
     "authors": [
@@ -13,6 +13,10 @@
         "commerce-dps": {
             "type": "vcs",
             "url": "https://git.drupalcode.org/project/commerce_dps.git"
+        },
+        "commerce-demo": {
+            "type": "vcs",
+            "url": "https://git.drupalcode.org/project/commerce_demo.git"
         },
         "drupal-composer": {
             "type": "composer",
@@ -29,17 +33,28 @@
     },
     "config": {
         "discard-changes": true,
-        "sort-packages": true
+        "sort-packages": true,
+        "allow-plugins": {
+            "composer/installers": true,
+            "drupal/core-composer-scaffold": true,
+            "phpro/grumphp-shim": true,
+            "cweagans/composer-patches": true,
+            "oomphinc/composer-installers-extender": true,
+            "dealerdirect/phpcodesniffer-composer-installer": true
+        }
     },
     "require": {
-        "php": ">=7.1",
+        "php": ">=7.4",
+        "ext-bcmath": "*",
         "ext-curl": "*",
+        "ext-gd": "*",
         "centarro/commerce_kickstart": "^3.0.0",
         "composer/installers": "^1.2",
         "cweagans/composer-patches": "^1.7",
-        "drupal/commerce_dps": "^2.0.0@stable",
-        "drupal/core": "^8.9.0",
-        "drupal/core-composer-scaffold": "^8.9.0",
+        "drupal/commerce_demo": "^3.0",
+        "drupal/commerce_dps": "^2.0.0",
+        "drupal/core": "^9.2.0",
+        "drupal/core-composer-scaffold": "^9.2.0",
         "drupal/devel": "^4.1",
         "drush/drush": "^9.7.1 | ^10.0.0",
         "oomphinc/composer-installers-extender": "^2.0",
@@ -47,11 +62,17 @@
         "webmozart/path-util": "^2.3"
     },
     "require-dev": {
-        "drupal/core-dev": "^8.9.0",
-        "integratedexperts/behat-format-progress-fail": "^0.2.1",
-        "integratedexperts/behat-screenshot": "^0.7.3",
-        "integratedexperts/behat-steps": "^0.2.2",
-        "xurizaemon/drupal-suggested": "^0.0.6"
+        "centarro/certified-projects": "^1.0",
+        "dmore/behat-chrome-extension": "^1.4",
+        "drevops/behat-format-progress-fail": "^0.2.1",
+        "drevops/behat-screenshot": "^0.7.3",
+        "drevops/behat-steps": "^0.2.2",
+        "drupal/core-dev": "^9.2.0",
+        "drupal/drupal-driver": "^2.1",
+        "drupal/drupal-extension": "^4.1",
+        "phpro/grumphp-shim": "^1.5",
+        "rpkamp/mailhog-behat-extension": "^0.6.7",
+        "squizlabs/php_codesniffer": "^3.6"
     },
     "conflict": {
         "drupal/drupal": "*"
