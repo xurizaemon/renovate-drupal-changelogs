@@ -1,0 +1,11 @@
+langcode: en
+status: true
+dependencies: {  }
+id: mailhog
+label: 'Mailhog'
+plugin: smtp
+configuration:
+  user: ''
+  pass: ''
+  host: mailhog
+  port: 1025

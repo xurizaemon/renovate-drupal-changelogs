@@ -4,14 +4,15 @@ default:
       paths:
         - '%paths.base%/features'
       contexts:
-        - FeatureContext
+        - DrevOps\BehatScreenshotExtension\Context\ScreenshotContext
         - Drupal\DrupalExtension\Context\ConfigContext
         - Drupal\DrupalExtension\Context\DrupalContext
         - Drupal\DrupalExtension\Context\DrushContext
+        - Drupal\DrupalExtension\Context\MarkupContext
         - Drupal\DrupalExtension\Context\MessageContext
         - Drupal\DrupalExtension\Context\MinkContext
         - Drupal\DrupalExtension\Context\RandomContext
-        - IntegratedExperts\BehatScreenshotExtension\Context\ScreenshotContext
+        - FeatureContext
   extensions:
     DMore\ChromeExtension\Behat\ServiceContainer\ChromeExtension:
     Drupal\DrupalExtension:
@@ -31,11 +32,10 @@ default:
       sessions:
         default:
           chrome:
-            socket_timeout: 60
+            socket_timeout: 10
             api_url: "http://chrome:9222"
             dom_wait_timeout: 5000
-    # Allows to capture HTML and JPG screenshots (based on the driver used).
-    IntegratedExperts\BehatScreenshotExtension:
+    DrevOps\BehatScreenshotExtension:
       dir: '%paths.base%/../screenshots'
       fail: true
       purge: true
@@ -52,12 +52,8 @@ ci:
         - '%paths.base%/features'
   extensions:
     Drupal\MinkExtension:
-      base_url: http://0.0.0.0:80
-      sessions:
-        default:
-          chrome:
-            api_url: "http://localhost:9222"
-    IntegratedExperts\BehatScreenshotExtension:
+      base_url: http://build:80
+    DrevOps\BehatScreenshotExtension:
       dir: '%paths.base%/../../screenshots'
   formatters:
     junit:

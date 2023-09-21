@@ -21,6 +21,23 @@ class FeatureContext extends RawDrupalContext {
   }
 
   /**
+   * CVC entry workaround for Windcave.
+   *
+   * For some reason the Windcave CVC input field doesn't behave as expected;
+   * this JS fillField() equivalent works around the issue.
+   *
+   * @see \Drupal\FunctionalJavascriptTests\JSWebAssert::assertWaitOnAjaxRequest()
+   *
+   * @Given I fill in Windcave "Cvc2" with ":value"
+   */
+  public function fillCvc2Input($value) {
+    $js = <<<JS
+        document.getElementsByName('Cvc2')[0].value = "{$value}";
+JS;
+    $this->getSession()->executeScript($js);
+  }
+
+  /**
    * @Given /^I wait (\d+) seconds?$/
    */
   public function iWaitSeconds($seconds) {

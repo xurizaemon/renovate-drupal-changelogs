@@ -1,15 +1,55 @@
 {
     "name": "xurizaemon/commerce-demo",
-    "description": "Demo project for Drupal Commerce",
-    "type": "project",
+    "description": "Drupal Commerce & Behat in CI demo, based on Centarro Commerce Kickstart 3.x project template",
     "license": "GPL-2.0-or-later",
+    "type": "project",
     "authors": [
         {
-            "name": "",
-            "role": ""
+            "name": "Chris Burgess",
+            "role": "chris@giantrobot.co.nz"
+        },
+        {
+            "name": "Centarro",
+            "role": "info@centarro.io"
         }
     ],
+    "require": {
+        "php": ">=8.1",
+        "ext-curl": "*",
+        "centarro/certified-projects": "^1.0",
+        "centarro/commerce_kickstart": "^3.0",
+        "composer/installers": "^2.0",
+        "cweagans/composer-patches": "^1.7",
+        "drupal/commerce_demo": "^3.0",
+        "drupal/commerce_dps": "2.0.x-dev",
+        "drupal/core-composer-scaffold": "^10",
+        "drupal/core-recommended": "^10",
+        "drupal/default_content": "^2",
+        "drush/drush": "^12.2",
+        "symfony/http-client": "^6.3",
+        "vlucas/phpdotenv": "^5.1",
+        "webflo/drupal-finder": "^1.2",
+        "webmozart/path-util": "^2.3"
+    },
+    "require-dev": {
+        "dmore/behat-chrome-extension": "^1.4",
+        "drevops/behat-format-progress-fail": "^1.0",
+        "drevops/behat-screenshot": "^1.2",
+        "drevops/behat-steps": "^2.0",
+        "drupal/core-dev": "^10",
+        "drupal/drupal-driver": "^2.2",
+        "drupal/drupal-extension": "^5.0@RC",
+        "phpro/grumphp-shim": "^2.0",
+        "squizlabs/php_codesniffer": "^3.7"
+    },
+    "conflict": {
+        "drupal/drupal": "*"
+    },
     "repositories": {
+        "commerce-dps": {
+            "type": "vcs",
+            "url": "https://git.drupalcode.org/project/commerce_dps.git"
+        },
         "commerce_demo": {
             "type": "vcs",
             "url": "https://git.drupalcode.org/project/commerce_demo.git"
@@ -18,8 +58,8 @@
             "type": "package",
             "package": {
                 "name": "furf/jquery-ui-touch-punch",
-                "version": "0.2.3",
                 "type": "drupal-library",
+                "version": "0.2.3",
                 "dist": {
                     "type": "zip",
                     "url": "https://github.com/furf/jquery-ui-touch-punch/archive/4bc009145202d9c7483ba85f3a236a8f3470354d.zip"
@@ -30,8 +70,8 @@
             "type": "package",
             "package": {
                 "name": "select2/select2",
-                "version": "4.1.0-rc.0",
                 "type": "drupal-library",
+                "version": "4.1.0-rc.0",
                 "dist": {
                     "type": "zip",
                     "url": "https://github.com/select2/select2/archive/refs/tags/4.1.0-rc.0.zip"
@@ -43,91 +83,46 @@
             "url": "https://packages.drupal.org/8"
         }
     },
-    "config": {
-        "bin-dir": "bin",
-        "sort-packages": true,
-        "allow-plugins": {
-            "composer/installers": true,
-            "dealerdirect/phpcodesniffer-composer-installer": true,
-            "cweagans/composer-patches": true,
-            "drupal/core-composer-scaffold": true,
-            "drupal/core-project-message": true,
-            "oomphinc/composer-installers-extender": true,
-            "phpstan/extension-installer": true,
-            "zaporylie/composer-drupal-optimizations": true
-        }
-    },
-    "require": {
-        "php": ">=8.1",
-        "ext-curl": "*",
-        "centarro/certified-projects": "^1.0",
-        "centarro/commerce_kickstart": "^3.0",
-        "composer/installers": "^2.0",
-        "cweagans/composer-patches": "^1.7",
-        "drupal/commerce_demo": "^3.0",
-        "drupal/core-composer-scaffold": "^10",
-        "drupal/core-project-message": "^10",
-        "drupal/core-recommended": "^10",
-        "drupal/default_content": "^2",
-        "drush/drush": "^11.4",
-        "vlucas/phpdotenv": "^5.1",
-        "webflo/drupal-finder": "^1.2",
-        "webmozart/path-util": "^2.3"
-    },
-    "require-dev": {
-        "drupal/core-dev": "^10",
-        "zaporylie/composer-drupal-optimizations": "^1.2"
-    },
-    "conflict": {
-        "drupal/drupal": "*"
-    },
     "minimum-stability": "dev",
     "prefer-stable": true,
     "autoload": {
         "classmap": [
             "scripts/composer/ScriptHandler.php"
         ],
-        "files": ["load.environment.php"]
-    },
-     "scripts": {
-        "drupal-scaffold": "DrupalComposer\\DrupalScaffold\\Plugin::scaffold",
-        "pre-install-cmd": [
-            "DrupalProject\\composer\\ScriptHandler::checkComposerVersion"
-        ],
-        "pre-update-cmd": [
-            "DrupalProject\\composer\\ScriptHandler::checkComposerVersion"
-        ],
-        "post-install-cmd": [
-            "DrupalProject\\composer\\ScriptHandler::createRequiredFiles"
-        ],
-        "post-update-cmd": [
-            "DrupalProject\\composer\\ScriptHandler::createRequiredFiles"
+        "files": [
+            "load.environment.php"
         ]
+    },
+    "config": {
+        "allow-plugins": {
+            "composer/installers": true,
+            "dealerdirect/phpcodesniffer-composer-installer": true,
+            "cweagans/composer-patches": true,
+            "drupal/core-composer-scaffold": true,
+            "oomphinc/composer-installers-extender": true,
+            "phpstan/extension-installer": true,
+            "php-http/discovery": true,
+            "phpro/grumphp-shim": true
+        },
+        "sort-packages": true
     },
     "extra": {
         "composer-exit-on-patch-failure": true,
-        "patches": {
-            "drupal/default_content": {
-                "#3160146 Add a Normalizer and Denormalizer to support Layout Builder": "patches/default_content/3160146-layout-builder.patch"
-            }
-        },
-        "patchLevel": {
-            "drupal/core": "-p2",
-            "drupal/default_content": "-p1"
-        },
         "drupal-scaffold": {
+            "file-mapping": {
+                "[web-root]/libraries/jquery-ui-touch-punch/jquery.ui.touch-punch.min.js": "libraries/jquery-ui-touch-punch/jquery.ui.touch-punch.min.js",
+                "[web-root]/libraries/select2/dist/css/select2.min.css": "libraries/select2/dist/css/select2.min.css",
+                "[web-root]/libraries/select2/dist/js/select2.min.js": "libraries/select2/dist/js/select2.min.js"
+            },
             "locations": {
                 "web-root": "web/"
             },
-            "overwrite": true,
-            "file-mapping": {
-                "[web-root]/libraries/jquery-ui-touch-punch/jquery.ui.touch-punch.min.js": "libraries/jquery-ui-touch-punch/jquery.ui.touch-punch.min.js",
-                "[web-root]/libraries/select2/dist/js/select2.min.js": "libraries/select2/dist/js/select2.min.js",
-                "[web-root]/libraries/select2/dist/css/select2.min.css": "libraries/select2/dist/css/select2.min.css"
-            }
+            "overwrite": true
         },
         "installer-paths": {
-            "web/core": ["type:drupal-core"],
+            "web/core": [
+                "type:drupal-core"
+            ],
             "libraries/{$name}": [
                 "furf/jquery-ui-touch-punch",
                 "select2/select2"
@@ -148,23 +143,32 @@
                 "type:drupal-drush"
             ]
         },
-         "drupal-core-project-message": {
-            "include-keys": ["homepage", "support"],
-            "post-create-project-cmd-message": [
-                "<bg=magenta;fg=white>                                                      </>",
-                "<bg=magenta;fg=white>  Congratulations, you installed Commerce Kickstart!  </>",
-                "<bg=magenta;fg=white>                                                      </>",
-                "",
-                "<bg=yellow;fg=black>Next steps</>:",
-
-                "  * Install the site: https://www.drupal.org/docs/installing-drupal",
-                "  * Read the Drupal Commerce docs: https://docs.drupalcommerce.org/commerce2",
-                "  * Get support: https://drupal.stackexchange.com/",
-                "  * Get involved with the Drupal community:",
-                "      https://www.drupal.org/getting-involved",
-                "  * Remove the plugin that prints this message:",
-                "      composer remove drupal/core-project-message"
-            ]
+        "patchLevel": {
+            "drupal/core": "-p2",
+            "drupal/default_content": "-p1"
+        },
+        "patches": {
+            "drupal/commerce_dps": {
+                "#3275719: PHP8 / Drupal 10": "https://git.drupalcode.org/project/commerce_dps/-/merge_requests/11.patch"
+            },
+            "drupal/default_content": {
+                "#3160146 Add a Normalizer and Denormalizer to support Layout Builder": "https://www.drupal.org/files/issues/2022-12-06/default_content-3160146-53.patch"
+            }
         }
+    },
+    "scripts": {
+        "pre-install-cmd": [
+            "DrupalProject\\composer\\ScriptHandler::checkComposerVersion"
+        ],
+        "post-install-cmd": [
+            "DrupalProject\\composer\\ScriptHandler::createRequiredFiles"
+        ],
+        "pre-update-cmd": [
+            "DrupalProject\\composer\\ScriptHandler::checkComposerVersion"
+        ],
+        "post-update-cmd": [
+            "DrupalProject\\composer\\ScriptHandler::createRequiredFiles"
+        ],
+        "drupal-scaffold": "DrupalComposer\\DrupalScaffold\\Plugin::scaffold"
     }
 }

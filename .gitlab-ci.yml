@@ -1,10 +1,16 @@
-image: mogtofu33/drupal8ci:3.x-dev-8.9
+image: devwithlando/php:8.1-apache-4
 
 stages:
   - build
   - lint
   - test
   - check
+
+workflow:
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+    - if: '$CI_PIPELINE_SOURCE == "schedule"'
+    - if: '$CI_PIPELINE_SOURCE == "web"'
 
 .cache_strategy_push:
   cache:
@@ -27,16 +33,29 @@ stages:
   services:
      - name: mailhog/mailhog
        alias: mailhog
+     - name: zenika/alpine-chrome:latest
+       alias: chrome
+       command: [
+          "--disable-dev-shm-usage",
+          "--disable-gpu",
+          "--disable-software-rasterizer",
+          "--headless",
+          "--no-sandbox",
+          "--no-sandbox",
+          "--no-web-security",
+          "--remote-debugging-address=0.0.0.0",
+          "--remote-debugging-port=9222",
+          "--use-gl=swiftshader",
+          "--window-size=1080,1920"
+       ]
 
-build drupal:
+composer install:
   extends: .cache_strategy_push
   stage: build
-  tags:
-    - docker
   before_script:
-    - export PATH=$PATH:$( pwd )/vendor/bin
+    - export PATH=$PATH:${CI_PROJECT_DIR}/vendor/bin
   script:
-    - composer install --quiet
+    - composer install
   artifacts:
     when: always
     name: "artifacts-${CI_JOB_NAME}-${CI_COMMIT_SHA}"
@@ -48,35 +67,33 @@ lint drupal:
   extends: .cache_strategy_push
   stage: lint
   needs:
-    - build drupal
-  tags:
-    - docker
+    - composer install
   before_script:
-    - export PATH=$PATH:$( pwd )/vendor/bin
+    - export PATH=$PATH:${CI_PROJECT_DIR}/vendor/bin
   script:
     - php vendor/bin/grumphp run --testsuite=ci
-  # when: manual
 
-Behat:
+behat:
   extends: .drupal_in_ci
   stage: test
   needs:
-    - build drupal
-  tags:
-    - docker
+    - composer install
   variables:
-    HOST_PORT: "0.0.0.0:80"
-    DRUPAL_ENVIRONMENT: ci
     BEHAT_TAGS: "~@skipped"
+    DRUPAL_ENVIRONMENT: ci
+    FF_NETWORK_PER_BUILD: 1
+    HOST_PORT: "build:80"
   before_script:
     - mkdir tmp
     - php -i > tmp/php-info.txt
-    - export PATH=$PATH:$( pwd )/vendor/bin
-    - google-chrome --disable-gpu --headless --remote-debugging-address=0.0.0.0 --remote-debugging-port=9222 --window-size=1280,1080 --no-sandbox --disable-web-security --disable-site-isolation-trials --user-data-dir=/tmp &> tmp/chromedriver-log.txt &
-    - curl -s http://127.0.0.1:9222/json/version -o tmp/chrome-version.txt || true
+    - export PATH=$PATH:${CI_PROJECT_DIR}/vendor/bin
+    - >
+      curl --silent --show-error --header "Host: localhost" http://chrome:9222/json/version | tee tmp/chromium-version.json
+    - cp config/settings.local.php web/sites/default/
     - drush site-install commerce_kickstart --site-name='Commerce Demo' --no-interaction --db-url=sqlite://sites/default/files/db.sqlite
     - drush -y pm:enable commerce_dps commerce_demo
-    - drush -y config:import --partial --source=../config/drupal/ci
+    - drush -y config:import --partial --source=../config/splits/ci
+    - drush -y config:import --partial --source=../config/splits/commerce_dps
     - php -S $HOST_PORT -t ./web &> tmp/php-log.txt &
     - drush -y cron
     - until curl -s http://$HOST_PORT; do true; done > /dev/null
@@ -97,8 +114,8 @@ Behat:
     reports:
       junit: reports/junit/*.xml
 
-Behat - 2.0.x-dev:
-  extends: Behat
+.behat (latest drupal/commerce_dps):
+  extends: behat
   before_script:
     - mkdir tmp
     - php -i > tmp/php-info.txt
@@ -106,6 +123,7 @@ Behat - 2.0.x-dev:
     - composer require drupal/commerce_dps:2.0.x-dev
     - google-chrome --disable-gpu --headless --remote-debugging-address=0.0.0.0 --remote-debugging-port=9222 --window-size=1280,1080 --no-sandbox --disable-web-security --disable-site-isolation-trials --user-data-dir=/tmp &> tmp/chromedriver-log.txt &
     - curl -s http://127.0.0.1:9222/json/version -o tmp/chrome-version.txt || true
+    - cp config/settings.local.php web/sites/default/
     - drush site-install commerce_kickstart --site-name='Commerce Demo' --no-interaction --db-url=sqlite://sites/default/files/db.sqlite
     - drush -y pm:enable commerce_dps commerce_demo
     - drush -y config:import --partial --source=../config/drupal/ci
@@ -115,8 +133,8 @@ Behat - 2.0.x-dev:
     - curl -o tmp/index.html -s http://$HOST_PORT
     - cd tests/behat
 
-Behat Chrome latest:
-  extends: Behat
+.behat (latest dmore/behat-chrome-extension):
+  extends: behat
   before_script:
     - mkdir tmp
     - php -i > tmp/php-info.txt
@@ -124,6 +142,7 @@ Behat Chrome latest:
     - composer require dmore/chrome-mink-driver:"dev-main as 2.9.0" dmore/behat-chrome-extension:"dev-main as 1.5.0"
     - google-chrome --disable-gpu --headless --remote-debugging-address=0.0.0.0 --remote-debugging-port=9222 --window-size=1280,1080 --no-sandbox --disable-web-security --disable-site-isolation-trials --user-data-dir=/tmp &> tmp/chromedriver-log.txt &
     - curl -s http://127.0.0.1:9222/json/version -o tmp/chrome-version.txt || true
+    - cp config/settings.local.php web/sites/default/
     - drush site-install commerce_kickstart --site-name='Commerce Demo' --no-interaction --db-url=sqlite://sites/default/files/db.sqlite
     - drush -y pm:enable commerce_dps commerce_demo
     - drush -y config:import --partial --source=../config/drupal/ci
@@ -133,8 +152,8 @@ Behat Chrome latest:
     - curl -o tmp/index.html -s http://$HOST_PORT
     - cd tests/behat
 
-.Behat alt:
-  extends: Behat
+.behat alt:
+  extends: behat
   variables:
     DRUPAL_URL: 0.0.0.0:80
   services:
@@ -164,28 +183,47 @@ Behat Chrome latest:
   script:
     - behat --colors --profile=ci --tags="${BEHAT_TAGS}"
 
-# Symfony security-checker report.
-security check:
+composer audit:
   extends: .cache_strategy_pull
-  stage: lint
-  tags:
-    - docker
+  stage: check
   needs:
-    - build drupal
+    - composer install
   before_script:
-    - PHP_SC_VERSION=$(curl -s "https://api.github.com/repos/fabpot/local-php-security-checker/releases/latest" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/;s/^v//')
-    - curl -LSs https://github.com/fabpot/local-php-security-checker/releases/download/v${PHP_SC_VERSION}/local-php-security-checker_${PHP_SC_VERSION}_linux_amd64 > ./php-security-checker
-    - chmod +x ./php-security-checker
+    - composer --version --no-ansi | tee composer-version.txt
   script:
-    - mkdir -p reports
-    - ./php-security-checker security:check composer.lock --no-ansi | tee reports/security-check-report.txt
-  # Allow failure to produce report and warning when we have an error.
+    - composer audit -v --no-ansi | tee composer-audit.txt
   allow_failure: true
   artifacts:
     when: always
     name: "artifacts-${CI_JOB_NAME}-${CI_COMMIT_SHA}"
     paths:
-      - reports
-  only:
-    - main
+      - composer-version.txt
+      - composer-audit.txt
 
+composer outdated:
+  extends: .cache_strategy_pull
+  stage: check
+  needs:
+    - composer install
+  script:
+    - composer outdated -v --no-ansi | tee composer-outdated.txt
+  allow_failure: true
+  artifacts:
+    when: always
+    name: "artifacts-${CI_JOB_NAME}-${CI_COMMIT_SHA}"
+    paths:
+      - composer-outdated.txt
+
+drush pm-security:
+  extends: .cache_strategy_pull
+  stage: check
+  needs:
+    - composer install
+  script:
+    - ./vendor/bin/drush pm:security | tee drush-security.txt
+  allow_failure: true
+  artifacts:
+    when: always
+    name: "artifacts-${CI_JOB_NAME}-${CI_COMMIT_SHA}"
+    paths:
+      - drush-security.txt

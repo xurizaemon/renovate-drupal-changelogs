@@ -1,5 +1,5 @@
 name: commerce-demo
-recipe: drupal9
+recipe: drupal10
 config:
   webroot: web
 env_file:
@@ -7,23 +7,26 @@ env_file:
   - .env
 services:
   appserver:
-    type: php:7.4
-    composer_version: 2
+    type: php:8.1
+    composer_version: 2-latest
     webroot: web
-    xdebug: off
     config:
       php: .lando/php.ini
+    environment:
+      DRUSH_OPTIONS_URI: https://commerce-demo.lndo.site
   chrome:
     type: compose
     services:
-      image: quay.io/pantheon-public/build-tools-ci:6.x
-      user: root
+      image: zenika/alpine-chrome
       ports:
         - '9222'
-      command: "google-chrome --disable-gpu --headless --remote-debugging-address=0.0.0.0 --remote-debugging-port=9222 --no-sandbox --window-size=1080,1920 </dev/null"
+      command: "chromium-browser --disable-gpu --headless --disable-dev-shm-usage --remote-debugging-address=0.0.0.0 --remote-debugging-port=9222 --no-sandbox --no-web-security --window-size=1080,1920 </dev/null"
       environment:
         SITE_URL: https://commerce-demo.lndo.site
         NODE_EXTRA_CA_CERTS: /user/.lando/certs/lndo.site.pem
+  mailhog:
+    # https://docs.lando.dev/config/mailhog.html#configuration
+    type: mailhog
 tooling:
   behat:
     service: appserver
@@ -35,8 +38,9 @@ tooling:
   site-install:
     service: appserver
     cmd:
-    - drush site-install --no-interaction commerce_kickstart
-    - drush -y pm:enable commerce_dps commerce_demo
-    - drush --yes config:set symfony_mailer.settings default_transport --value=ddev_smtp
-    - drush -y config:import --partial --source=../config/ci
-    - drush uli
+      - cmp --silent config/settings.local.php web/sites/default/settings.local.php || ( echo "web/sites/default/settings.local.php does not match config/settings.local.php, update?" && cp -iv config/settings.local.php web/sites/default/ )
+      - drush site-install --no-interaction commerce_kickstart
+      - drush -y pm:enable commerce_dps commerce_demo
+      - drush -y config:import --partial --source=../config/splits/ci
+      - drush -y config:import --partial --source=../config/splits/commerce_dps
+      - drush uli

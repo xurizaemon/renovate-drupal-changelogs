@@ -25,6 +25,8 @@ Feature: purchase
     And I fill in "Last name" with "Lastname"
     And I wait for AJAX to finish
     Then I press "Recalculate shipping"
+    # Shipping calculation may take time here.
+    And I wait 2 seconds
     And I wait for AJAX to finish
     And I press "Continue to review"
     And I wait for AJAX to finish
@@ -32,7 +34,8 @@ Feature: purchase
     # This is the PxPay hosted form.
     Then I fill in "Name On Card" with "Behat Anonymous"
     And I fill in "Card Number:" with "4111111111111111"
-    And I fill in "CVC:" with "111"
+    # Custom step definition in FeatureContext.php
+    And I fill in Windcave "Cvc2" with "111"
     And I select "12" from "Expiry Date (MM)"
     And I select "31" from "Expiry Date (YY)"
     And I press "Submit"
