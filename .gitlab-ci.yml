@@ -89,12 +89,14 @@ behat:
     - export PATH=$PATH:${CI_PROJECT_DIR}/vendor/bin
     - >
       curl --silent --show-error --header "Host: localhost" http://chrome:9222/json/version | tee tmp/chromium-version.json
+    - cp config/gitlab-ci/apache-vhost.conf /etc/apache2/sites-available/000-default.conf
+    - apache2ctl restart
     - cp config/settings.local.php web/sites/default/
     - drush site-install commerce_kickstart --site-name='Commerce Demo' --no-interaction --db-url=sqlite://sites/default/files/db.sqlite
+    - chmod -R ugo+rw web/sites/default/files
     - drush -y pm:enable commerce_dps commerce_demo
     - drush -y config:import --partial --source=../config/splits/ci
     - drush -y config:import --partial --source=../config/splits/commerce_dps
-    - php -S $HOST_PORT -t ./web &> tmp/php-log.txt &
     - drush -y cron
     - until curl -s http://$HOST_PORT; do true; done > /dev/null
     - curl -o tmp/index.html -s http://$HOST_PORT
