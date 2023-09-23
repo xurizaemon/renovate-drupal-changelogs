@@ -26,7 +26,7 @@ Feature: purchase
     And I wait for AJAX to finish
     Then I press "Recalculate shipping"
     # Shipping calculation may take time here.
-    # And I wait 2 seconds
+    And I wait 2 seconds
     And I wait for AJAX to finish
     And I press "Continue to review"
     And I wait for AJAX to finish
