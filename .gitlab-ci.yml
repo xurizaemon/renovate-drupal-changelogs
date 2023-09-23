@@ -224,3 +224,19 @@ drush pm-security:
     name: "artifacts-${CI_JOB_NAME}-${CI_COMMIT_SHA}"
     paths:
       - drush-security.txt
+
+report dependencies:
+  stage: check
+  image: composer:2
+  needs:
+    - composer install
+  before_script:
+    - composer global config --no-plugins allow-plugins.cyclonedx/cyclonedx-php-composer true
+    - composer global require cyclonedx/cyclonedx-php-composer
+  script:
+    - composer CycloneDX:make-sbom --output-format=JSON --output-file="$PWD/gl-sbom-composer.cdx.json"
+  artifacts:
+    reports:
+      cyclonedx:
+        - gl-sbom-composer.cdx.json
+  allow_failure: true
