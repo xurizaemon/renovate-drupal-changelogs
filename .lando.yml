@@ -5,6 +5,9 @@ config:
 env_file:
   - defaults.env
   - .env
+events:
+  post-start:
+    - appserver: echo "Run 'lando site-install' to install a site at ${DRUSH_OPTIONS_URI} then 'lando behat' to run Behat tests."
 services:
   appserver:
     type: php:8.1
