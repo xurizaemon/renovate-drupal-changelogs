@@ -35,10 +35,6 @@ grumphp:
         - txt
         - theme
         - yml
-    securitychecker_enlightn:
-        lockfile: ./composer.lock
-        run_always: false
-  # Sub-set of tasks defined above.
   testsuites:
     ci:
       tasks:

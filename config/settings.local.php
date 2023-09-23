@@ -153,3 +153,36 @@ $settings['skip_permissions_hardening'] = TRUE;
  * the language or field module.
  */
 # $settings['config_exclude_modules'] = ['devel', 'stage_file_proxy'];
+ini_set('memory_limit', '1024m');
+
+$settings['config_sync_directory'] = '../config/sync';
+$settings['file_private_path'] = '../files/private';
+$settings['file_temp_path'] = '/tmp';
+
+/**
+ * Database configuration from environment variables.
+ */
+if (getenv('LANDO') === 'ON') {
+  $lando_info = json_decode(getenv('LANDO_INFO'), TRUE);
+  $databases['default']['default'] = [
+    'database' => $lando_info['database']['creds']['database'],
+    'username' => $lando_info['database']['creds']['user'],
+    'password' => $lando_info['database']['creds']['password'],
+    'host' => $lando_info['database']['internal_connection']['host'],
+    'port' => $lando_info['database']['internal_connection']['port'],
+    'driver' => 'mysql',
+    'namespace' => 'Drupal\\Core\\Database\\Driver\\mysql',
+    'collation' => 'utf8mb4_general_ci',
+  ];
+  $settings['hash_salt'] = md5(getenv('LANDO_HOST_IP'));
+}
+
+if ($env_px_user = getenv('COMMERCE_DPS_PX_USERID')) {
+  $config['commerce_payment.commerce_payment_gateway.commerce_dps_pxpay']['configuration']['px_user'] = $env_px_user;
+}
+if ($env_px_key = getenv('COMMERCE_DPS_PX_KEY')) {
+  $config['commerce_payment.commerce_payment_gateway.commerce_dps_pxpay']['configuration']['px_key'] = $env_px_key;
+}
+if ($env_mailhog_host = getenv('MAILHOG_HOST')) {
+  $config['symfony_mailer.mailer_transport.ddev_smtp']['configuration']['host'] = $env_mailhog_host;
+}

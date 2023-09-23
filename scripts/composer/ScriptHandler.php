@@ -21,6 +21,7 @@ class ScriptHandler {
     $drupalFinder = new DrupalFinder();
     $drupalFinder->locateRoot(getcwd());
     $drupalRoot = $drupalFinder->getDrupalRoot();
+    $composerRoot = $drupalFinder->getComposerRoot();
 
     $dirs = [
       'modules',
@@ -37,16 +38,8 @@ class ScriptHandler {
     }
 
     // Prepare the settings file for installation
-    if (!$fs->exists($drupalRoot . '/sites/default/settings.php') && $fs->exists($drupalRoot . '/sites/default/default.settings.php')) {
-      $fs->copy($drupalRoot . '/sites/default/default.settings.php', $drupalRoot . '/sites/default/settings.php');
-      require_once $drupalRoot . '/core/includes/bootstrap.inc';
-      require_once $drupalRoot . '/core/includes/install.inc';
-      new Settings([]);
-      $settings['settings']['config_sync_directory'] = (object) [
-        'value' => Path::makeRelative($drupalFinder->getComposerRoot() . '/config/sync', $drupalRoot),
-        'required' => TRUE,
-      ];
-      drupal_rewrite_settings($settings, $drupalRoot . '/sites/default/settings.php');
+    if (!$fs->exists($drupalRoot . '/sites/default/settings.php') && $fs->exists($drupalRoot . '/profiles/contrib/commerce_kickstart/assets/settings.php')) {
+      $fs->copy($drupalRoot . '/profiles/contrib/commerce_kickstart/assets/settings.php', $drupalRoot . '/sites/default/settings.php');
       $fs->chmod($drupalRoot . '/sites/default/settings.php', 0666);
       $event->getIO()->write("Created a sites/default/settings.php file with chmod 0666");
     }
@@ -58,6 +51,10 @@ class ScriptHandler {
       umask($oldmask);
       $event->getIO()->write("Created a sites/default/files directory with chmod 0777");
     }
+    
+    // Mirror config splits from the profile to the project config directory.
+    $fs->mirror($drupalRoot . '/profiles/contrib/commerce_kickstart/config/splits', $composerRoot . '/config/splits');
+    $event->getIO()->write("Mirrored config splits from Commerce Kickstart into ../config/splits");
   }
 
   /**
