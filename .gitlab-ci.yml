@@ -185,6 +185,70 @@ behat:
   script:
     - behat --colors --profile=ci --tags="${BEHAT_TAGS}"
 
+cypress:
+  services:
+    - name: mailhog/mailhog
+      alias: mailhog
+  cache:
+    key: ${CI_COMMIT_REF_SLUG}
+    paths:
+      - .cache/*
+      - cache/Cypress
+      - node_modules
+      - build
+  stage: test
+  needs:
+    - composer install
+  variables:
+    CYPRESS_drushCommand: drush
+    CYPRESS_baseUrl: http://build/
+    CYPRESS_REQUIREMENTS: libgtk2.0-0 libgtk-3-0 libgbm-dev libnotify-dev libnss3 libxss1 libasound2 libxtst6 xauth xvfb
+    DRUPAL_ENVIRONMENT: ci
+    FF_NETWORK_PER_BUILD: 1
+    HOST_PORT: "build:80"
+    NODE_MAJOR: 20
+  before_script:
+    - apt -y update
+    - apt -y install ca-certificates curl gnupg ${CYPRESS_REQUIREMENTS}
+    - mkdir -p /etc/apt/keyrings
+    - curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg
+    - echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_${NODE_MAJOR}.x nodistro main" | tee /etc/apt/sources.list.d/nodesource.list
+    - apt -y update
+    - apt -y install nodejs
+    - mkdir tmp
+    - php -i > tmp/php-info.txt
+    - export PATH=$PATH:${CI_PROJECT_DIR}/vendor/bin:${CI_PROJECT_DIR}/tests/cypress/node_modules/.bin
+    - cp config/gitlab-ci/apache-vhost.conf /etc/apache2/sites-available/000-default.conf
+    - apache2ctl restart
+    - cp config/settings.local.php web/sites/default/
+    - drush site-install commerce_kickstart --site-name='Commerce Demo' --no-interaction --db-url=sqlite://sites/default/files/db.sqlite
+    - chmod -R ugo+rw web/sites/default/files
+    - drush -y pm:enable commerce_dps commerce_demo
+    - drush -y config:import --partial --source=../config/splits/ci
+    - drush -y config:import --partial --source=../config/splits/commerce_dps
+    - drush -y cron
+    - until curl -s http://$HOST_PORT; do true; done > /dev/null
+    - curl -o tmp/index.html -s http://$HOST_PORT
+    - cd tests/cypress
+    - npm ci
+  script:
+    - cp cypress.ci.env.json cypress.env.json
+    - cypress run
+  after_script:
+    - pwd
+    - cd ${CI_PROJECT_DIR}
+    - ${CI_PROJECT_DIR}/vendor/bin/drush sql:dump --result-file=${CI_PROJECT_DIR}/tmp/db.sql --gzip
+    - COLUMNS=240 ${CI_PROJECT_DIR}/vendor/bin/drush watchdog:show --count=50000 > ${CI_PROJECT_DIR}/tmp/drupal-log-messages.txt
+  artifacts:
+    when: always
+    name: "artifacts-${CI_JOB_NAME}-${CI_COMMIT_SHA}"
+    paths:
+      - tests/cypress/cypress/screenshots
+      - tests/cypress/results/*.xml
+      - tmp
+    reports:
+      junit: tests/cypress/results/*.xml
+
 .composer audit:
   extends: .cache_strategy_pull
   stage: check
