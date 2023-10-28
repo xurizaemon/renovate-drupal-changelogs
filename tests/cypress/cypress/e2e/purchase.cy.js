@@ -1,7 +1,7 @@
 describe('Commerce purchase', () => {
   it('User can make purchase registering new account', () => {
     // A random string for username, email etc.
-    const randomString = Cypress._.uniqueId(Date.now().toString());
+    const randomString = Cypress._.uniqueId(`rnd_${new Date().getTime()}_`)
 
     // Add a product to our cart, then visit checkout.
     cy.visit('/products/24-x-30-hiding-goat-print')
