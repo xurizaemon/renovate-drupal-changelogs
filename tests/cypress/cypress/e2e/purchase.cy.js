@@ -55,34 +55,7 @@ describe('Commerce purchase', () => {
     cy.get('.button--primary.form-submit.btn-success')
       .click()
 
-    // Payment via DPS.
-    cy.origin('https://sec.windcave.com', () => {
-      cy.get('h1')
-        .should('contain', 'Payment Checkout')
-      cy.get('h1')
-        .should('contain', 'Credit Card Payment')
-
-      // DPS CC details.
-      cy.get('input[name="CardNumber"]')
-        .type('4111111111111111')
-      cy.get('input[name="CardHolderName"]')
-        .type('Cypress Anonymous')
-      cy.get('select[name="DateExpiry_1"]')
-        .select('11')
-      cy.get('select[name="DateExpiry_2"]')
-        .select('31')
-      cy.get('input[name="Cvc2"]')
-        .type('111')
-      cy.get('.DpsPxPayOK')
-        .click()
-
-      cy.get('h1')
-        .should('contain', 'Payment Checkout')
-
-      // DPS confirmation.
-      cy.get('.DpsPxPayOK')
-        .click()
-    })
+    cy.windcavePayment();
 
     cy.get('.checkout-complete')
       .should('contain', 'Your order number is')
