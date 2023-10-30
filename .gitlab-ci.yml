@@ -303,6 +303,55 @@ cypress:
     reports:
       junit: tests/cypress/results/*.xml
 
+pa11y:
+  cache:
+    key: ${CI_COMMIT_REF_SLUG}
+    paths:
+      - .cache/*
+      - cache/Cypress
+      - node_modules
+      - build
+  image: registry.gitlab.com/gitlab-ci-utils/gitlab-pa11y-ci:latest
+  needs:
+    - drupal install
+  stage: test
+  variables:
+    FF_NETWORK_PER_BUILD: 1
+    HOST_PORT: "www:80"
+    NODE_MAJOR: 20
+    PA11Y_THRESHOLD: 100
+  services:
+    # Entrypoint configuration from https://gitlab.com/gitlab-org/gitlab-runner/-/issues/3210#note_380999884
+    - name: devwithlando/php:8.1-apache-4
+      alias: www
+      entrypoint:
+        - '/bin/bash'
+        - '-c'
+        - |
+          # wait for project clone/checkout to complete
+          until [ -f "${CI_PROJECT_DIR}/.git/index" ]; do sleep 1; done;
+          while [ -f "${CI_PROJECT_DIR}/.git/index.lock" ]; do sleep 1; done;
+          # setup service as you need
+          mkdir -p ${CI_PROJECT_DIR}/tmp
+          cp -R "${CI_PROJECT_DIR}/config/gitlab-ci/apache-vhost.conf" "/etc/apache2/sites-enabled/000-default.conf"
+          # pass control to the default image entrypoint
+          exec /usr/local/bin/docker-php-entrypoint "$@"
+        # arg $0 should be explicitly passed when using 'bash -c' entrypoints
+        - '/bin/bash'
+      # using entrypoint means you have to pass the default image command as well
+      command:
+        - 'apache2-foreground'
+  script:
+    - pa11y-ci --threshold ${PA11Y_THRESHOLD} --reporter=json > pa11y-ci-results.json
+  artifacts:
+    # Make sure artifacts are always saved, otherwise they will not be on failure.
+    when: always
+    paths:
+      - pa11y-ci-results.json
+      - tmp
+    reports:
+      accessibility: pa11y-ci-results.json
+
 .composer audit:
   extends: .cache_strategy_pull
   stage: check
