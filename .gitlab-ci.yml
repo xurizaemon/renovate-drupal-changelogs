@@ -28,27 +28,6 @@ workflow:
   cache:
     policy: pull
 
-.drupal_in_ci:
-  extends: .cache_strategy_pull
-  services:
-     - name: mailhog/mailhog
-       alias: mailhog
-     - name: zenika/alpine-chrome:latest
-       alias: chrome
-       command: [
-          "--disable-dev-shm-usage",
-          "--disable-gpu",
-          "--disable-software-rasterizer",
-          "--headless",
-          "--no-sandbox",
-          "--no-sandbox",
-          "--no-web-security",
-          "--remote-debugging-address=0.0.0.0",
-          "--remote-debugging-port=9222",
-          "--use-gl=swiftshader",
-          "--window-size=1080,1920"
-       ]
-
 composer install:
   extends: .cache_strategy_push
   stage: build
@@ -74,30 +53,41 @@ lint drupal:
     - php vendor/bin/grumphp run --testsuite=ci
 
 behat:
-  extends: .drupal_in_ci
+  extends: .cache_strategy_pull
+  services:
+    - name: mailhog/mailhog
+      alias: mailhog
+    - name: zenika/alpine-chrome:latest
+      alias: chrome
+      command: [
+        "--disable-dev-shm-usage",
+        "--disable-gpu",
+        "--disable-software-rasterizer",
+        "--headless",
+        "--no-sandbox",
+        "--no-sandbox",
+        "--no-web-security",
+        "--remote-debugging-address=0.0.0.0",
+        "--remote-debugging-port=9222",
+        "--use-gl=swiftshader",
+        "--window-size=1080,1920"
+      ]
   stage: test
   needs:
-    - composer install
+    - drupal install
   variables:
     BEHAT_TAGS: "~@skipped"
     DRUPAL_ENVIRONMENT: ci
     FF_NETWORK_PER_BUILD: 1
     HOST_PORT: "build:80"
   before_script:
-    - mkdir tmp
+    - mkdir -p tmp
     - php -i > tmp/php-info.txt
     - export PATH=$PATH:${CI_PROJECT_DIR}/vendor/bin
     - >
       curl --silent --show-error --header "Host: localhost" http://chrome:9222/json/version | tee tmp/chromium-version.json
     - cp config/gitlab-ci/apache-vhost.conf /etc/apache2/sites-available/000-default.conf
     - apache2ctl restart
-    - cp config/settings.local.php web/sites/default/
-    - drush site-install commerce_kickstart --site-name='Commerce Demo' --no-interaction --db-url=sqlite://sites/default/files/db.sqlite
-    - chmod -R ugo+rw web/sites/default/files
-    - drush -y pm:enable commerce_dps commerce_demo
-    - drush -y config:import --partial --source=../config/splits/ci
-    - drush -y config:import --partial --source=../config/splits/commerce_dps
-    - drush -y cron
     - until curl -s http://$HOST_PORT; do true; done > /dev/null
     - curl -o tmp/index.html -s http://$HOST_PORT
     - cd tests/behat
@@ -119,7 +109,7 @@ behat:
 .behat (latest drupal/commerce_dps):
   extends: behat
   before_script:
-    - mkdir tmp
+    - mkdir -p tmp
     - php -i > tmp/php-info.txt
     - export PATH=$PATH:$( pwd )/vendor/bin
     - composer require drupal/commerce_dps:2.0.x-dev
@@ -138,7 +128,7 @@ behat:
 .behat (latest dmore/behat-chrome-extension):
   extends: behat
   before_script:
-    - mkdir tmp
+    - mkdir -p tmp
     - php -i > tmp/php-info.txt
     - export PATH=$PATH:$( pwd )/vendor/bin
     - composer require dmore/chrome-mink-driver:"dev-main as 2.9.0" dmore/behat-chrome-extension:"dev-main as 1.5.0"
