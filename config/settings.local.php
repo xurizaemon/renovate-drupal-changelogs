@@ -177,6 +177,17 @@ if (getenv('LANDO') === 'ON') {
   $settings['hash_salt'] = md5(getenv('LANDO_HOST_IP'));
 }
 
+// May be a hack - gitlab-ci-local seemed to overwrite settings.php after "drupal install" script complete?!
+if (getenv('CI_PROJECT_NAME')) {
+  $databases['default']['default'] = array (
+    'database' => 'sites/default/files/db.sqlite',
+    'prefix' => '',
+    'namespace' => 'Drupal\\sqlite\\Driver\\Database\\sqlite',
+    'driver' => 'sqlite',
+    'autoload' => 'core/modules/sqlite/src/Driver/Database/sqlite/',
+  );
+}
+
 if ($env_px_user = getenv('COMMERCE_DPS_PX_USERID')) {
   $config['commerce_payment.commerce_payment_gateway.commerce_dps_pxpay']['configuration']['px_user'] = $env_px_user;
 }

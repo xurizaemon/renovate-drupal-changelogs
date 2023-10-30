@@ -28,27 +28,6 @@ workflow:
   cache:
     policy: pull
 
-.drupal_in_ci:
-  extends: .cache_strategy_pull
-  services:
-     - name: mailhog/mailhog
-       alias: mailhog
-     - name: zenika/alpine-chrome:latest
-       alias: chrome
-       command: [
-          "--disable-dev-shm-usage",
-          "--disable-gpu",
-          "--disable-software-rasterizer",
-          "--headless",
-          "--no-sandbox",
-          "--no-sandbox",
-          "--no-web-security",
-          "--remote-debugging-address=0.0.0.0",
-          "--remote-debugging-port=9222",
-          "--use-gl=swiftshader",
-          "--window-size=1080,1920"
-       ]
-
 composer install:
   extends: .cache_strategy_push
   stage: build
@@ -74,30 +53,41 @@ lint drupal:
     - php vendor/bin/grumphp run --testsuite=ci
 
 behat:
-  extends: .drupal_in_ci
+  extends: .cache_strategy_pull
+  services:
+    - name: mailhog/mailhog
+      alias: mailhog
+    - name: zenika/alpine-chrome:latest
+      alias: chrome
+      command: [
+        "--disable-dev-shm-usage",
+        "--disable-gpu",
+        "--disable-software-rasterizer",
+        "--headless",
+        "--no-sandbox",
+        "--no-sandbox",
+        "--no-web-security",
+        "--remote-debugging-address=0.0.0.0",
+        "--remote-debugging-port=9222",
+        "--use-gl=swiftshader",
+        "--window-size=1080,1920"
+      ]
   stage: test
   needs:
-    - composer install
+    - drupal install
   variables:
     BEHAT_TAGS: "~@skipped"
     DRUPAL_ENVIRONMENT: ci
     FF_NETWORK_PER_BUILD: 1
     HOST_PORT: "build:80"
   before_script:
-    - mkdir tmp
+    - mkdir -p tmp
     - php -i > tmp/php-info.txt
     - export PATH=$PATH:${CI_PROJECT_DIR}/vendor/bin
     - >
       curl --silent --show-error --header "Host: localhost" http://chrome:9222/json/version | tee tmp/chromium-version.json
     - cp config/gitlab-ci/apache-vhost.conf /etc/apache2/sites-available/000-default.conf
     - apache2ctl restart
-    - cp config/settings.local.php web/sites/default/
-    - drush site-install commerce_kickstart --site-name='Commerce Demo' --no-interaction --db-url=sqlite://sites/default/files/db.sqlite
-    - chmod -R ugo+rw web/sites/default/files
-    - drush -y pm:enable commerce_dps commerce_demo
-    - drush -y config:import --partial --source=../config/splits/ci
-    - drush -y config:import --partial --source=../config/splits/commerce_dps
-    - drush -y cron
     - until curl -s http://$HOST_PORT; do true; done > /dev/null
     - curl -o tmp/index.html -s http://$HOST_PORT
     - cd tests/behat
@@ -119,7 +109,7 @@ behat:
 .behat (latest drupal/commerce_dps):
   extends: behat
   before_script:
-    - mkdir tmp
+    - mkdir -p tmp
     - php -i > tmp/php-info.txt
     - export PATH=$PATH:$( pwd )/vendor/bin
     - composer require drupal/commerce_dps:2.0.x-dev
@@ -138,7 +128,7 @@ behat:
 .behat (latest dmore/behat-chrome-extension):
   extends: behat
   before_script:
-    - mkdir tmp
+    - mkdir -p tmp
     - php -i > tmp/php-info.txt
     - export PATH=$PATH:$( pwd )/vendor/bin
     - composer require dmore/chrome-mink-driver:"dev-main as 2.9.0" dmore/behat-chrome-extension:"dev-main as 1.5.0"
@@ -185,6 +175,82 @@ behat:
   script:
     - behat --colors --profile=ci --tags="${BEHAT_TAGS}"
 
+drupal install:
+  extends: .cache_strategy_pull
+  stage: test
+  needs:
+    - composer install
+  script:
+    - mkdir -p tmp
+    - php -i > tmp/php-info.txt
+    - cp config/settings.local.php web/sites/default/
+    - ./vendor/bin/drush site-install commerce_kickstart --site-name='Commerce Demo' --no-interaction --db-url=sqlite://sites/default/files/db.sqlite
+    - chmod -R ugo+rw web/sites/default/files
+    - ./vendor/bin/drush -y pm:enable commerce_dps commerce_demo
+    - ./vendor/bin/drush -y config:import --partial --source=../config/splits/ci
+    - ./vendor/bin/drush -y config:import --partial --source=../config/splits/commerce_dps
+    - ./vendor/bin/drush -y cron
+  after_script:
+    - ./vendor/bin/drush status | tee tmp/drush-status.txt
+  artifacts:
+    when: always
+    name: "artifacts-${CI_JOB_NAME}-${CI_COMMIT_SHA}"
+    paths:
+      - composer.*
+      - config/
+      - vendor/
+      - tmp/
+      - web/
+
+drupal status:
+  stage: test
+  needs:
+    - drupal install
+  script:
+    - php -i > tmp/php-info.txt
+    - ./vendor/bin/drush -v -r web status | tee tmp/drush-status.txt
+  artifacts:
+    when: always
+    name: "artifacts-${CI_JOB_NAME}-${CI_COMMIT_SHA}"
+    paths:
+      - tmp/
+
+drupal in service:
+  stage: test
+  variables:
+    FF_NETWORK_PER_BUILD: 1
+    CI_DEBUG_SERVICES: "true"
+  needs:
+    - drupal install
+  services:
+    # Entrypoint configuration from https://gitlab.com/gitlab-org/gitlab-runner/-/issues/3210#note_380999884
+    - name: devwithlando/php:8.1-apache-4
+      alias: www
+      entrypoint:
+        - '/bin/bash'
+        - '-c'
+        - |
+          # wait for project clone/checkout to complete
+          until [ -f "${CI_PROJECT_DIR}/.git/index" ]; do sleep 1; done;
+          while [ -f "${CI_PROJECT_DIR}/.git/index.lock" ]; do sleep 1; done;
+          # setup service as you need
+          mkdir -p ${CI_PROJECT_DIR}/tmp
+          cp -R "${CI_PROJECT_DIR}/config/gitlab-ci/apache-vhost.conf" "/etc/apache2/sites-enabled/000-default.conf"
+          # pass control to the default image entrypoint
+          exec /usr/local/bin/docker-php-entrypoint "$@"
+        # arg $0 should be explicitly passed when using 'bash -c' entrypoints
+        - '/bin/bash'
+      # using entrypoint means you have to pass the default image command as well
+      command:
+        - 'apache2-foreground'
+  script:
+    - curl http://www/ | tee tmp/index.html
+  artifacts:
+    when: always
+    name: "artifacts-${CI_JOB_NAME}-${CI_COMMIT_SHA}"
+    paths:
+      - tmp/
+
 cypress:
   services:
     - name: mailhog/mailhog
@@ -192,13 +258,13 @@ cypress:
   cache:
     key: ${CI_COMMIT_REF_SLUG}
     paths:
-      - .cache/*
-      - cache/Cypress
-      - node_modules
-      - build
+      - tests/cypress/.cache/*
+      - tests/cypress/cache/Cypress
+      - tests/cypress/node_modules
+      - tests/cypress/build
   stage: test
   needs:
-    - composer install
+    - drupal install
   variables:
     CYPRESS_drushCommand: drush
     CYPRESS_baseUrl: http://build/
@@ -215,18 +281,11 @@ cypress:
     - echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_${NODE_MAJOR}.x nodistro main" | tee /etc/apt/sources.list.d/nodesource.list
     - apt -y update
     - apt -y install nodejs
-    - mkdir tmp
+    - mkdir -p tmp
     - php -i > tmp/php-info.txt
     - export PATH=$PATH:${CI_PROJECT_DIR}/vendor/bin:${CI_PROJECT_DIR}/tests/cypress/node_modules/.bin
     - cp config/gitlab-ci/apache-vhost.conf /etc/apache2/sites-available/000-default.conf
     - apache2ctl restart
-    - cp config/settings.local.php web/sites/default/
-    - drush site-install commerce_kickstart --site-name='Commerce Demo' --no-interaction --db-url=sqlite://sites/default/files/db.sqlite
-    - chmod -R ugo+rw web/sites/default/files
-    - drush -y pm:enable commerce_dps commerce_demo
-    - drush -y config:import --partial --source=../config/splits/ci
-    - drush -y config:import --partial --source=../config/splits/commerce_dps
-    - drush -y cron
     - until curl -s http://$HOST_PORT; do true; done > /dev/null
     - curl -o tmp/index.html -s http://$HOST_PORT
     - cd tests/cypress
@@ -234,11 +293,6 @@ cypress:
   script:
     - cp cypress.ci.env.json cypress.env.json
     - cypress run
-  after_script:
-    - pwd
-    - cd ${CI_PROJECT_DIR}
-    - ${CI_PROJECT_DIR}/vendor/bin/drush sql:dump --result-file=${CI_PROJECT_DIR}/tmp/db.sql --gzip
-    - COLUMNS=240 ${CI_PROJECT_DIR}/vendor/bin/drush watchdog:show --count=50000 > ${CI_PROJECT_DIR}/tmp/drupal-log-messages.txt
   artifacts:
     when: always
     name: "artifacts-${CI_JOB_NAME}-${CI_COMMIT_SHA}"
