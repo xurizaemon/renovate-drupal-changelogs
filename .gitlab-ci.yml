@@ -185,6 +185,42 @@ behat:
   script:
     - behat --colors --profile=ci --tags="${BEHAT_TAGS}"
 
+drupal install:
+  extends: .cache_strategy_pull
+  stage: test
+  needs:
+    - composer install
+  script:
+    - mkdir -p tmp
+    - php -i > tmp/php-info.txt
+    - cp config/settings.local.php web/sites/default/
+    - ./vendor/bin/drush site-install commerce_kickstart --site-name='Commerce Demo' --no-interaction --db-url=sqlite://sites/default/files/db.sqlite
+    - chmod -R ugo+rw web/sites/default/files
+    - ./vendor/bin/drush -y pm:enable commerce_dps commerce_demo
+    - ./vendor/bin/drush -y config:import --partial --source=../config/splits/ci
+    - ./vendor/bin/drush -y config:import --partial --source=../config/splits/commerce_dps
+    - ./vendor/bin/drush -y cron
+  after_script:
+    - ./vendor/bin/drush status | tee tmp/drush-status.txt
+  artifacts:
+    when: always
+    name: "artifacts-${CI_JOB_NAME}-${CI_COMMIT_SHA}"
+    paths:
+      - composer.*
+      - config/
+      - vendor/
+      - tmp/
+      - web/
+
+drupal run:
+  stage: test
+  needs:
+    - drupal install
+  script:
+    - php -i > tmp/php-info.txt
+    - find web/sites
+    - ./vendor/bin/drush -v -r web status | tee tmp/drush-status.txt
+
 cypress:
   services:
     - name: mailhog/mailhog
@@ -192,13 +228,13 @@ cypress:
   cache:
     key: ${CI_COMMIT_REF_SLUG}
     paths:
-      - .cache/*
-      - cache/Cypress
-      - node_modules
-      - build
+      - tests/cypress/.cache/*
+      - tests/cypress/cache/Cypress
+      - tests/cypress/node_modules
+      - tests/cypress/build
   stage: test
   needs:
-    - composer install
+    - drupal install
   variables:
     CYPRESS_drushCommand: drush
     CYPRESS_baseUrl: http://build/
@@ -215,18 +251,11 @@ cypress:
     - echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_${NODE_MAJOR}.x nodistro main" | tee /etc/apt/sources.list.d/nodesource.list
     - apt -y update
     - apt -y install nodejs
-    - mkdir tmp
+    - mkdir -p tmp
     - php -i > tmp/php-info.txt
     - export PATH=$PATH:${CI_PROJECT_DIR}/vendor/bin:${CI_PROJECT_DIR}/tests/cypress/node_modules/.bin
     - cp config/gitlab-ci/apache-vhost.conf /etc/apache2/sites-available/000-default.conf
     - apache2ctl restart
-    - cp config/settings.local.php web/sites/default/
-    - drush site-install commerce_kickstart --site-name='Commerce Demo' --no-interaction --db-url=sqlite://sites/default/files/db.sqlite
-    - chmod -R ugo+rw web/sites/default/files
-    - drush -y pm:enable commerce_dps commerce_demo
-    - drush -y config:import --partial --source=../config/splits/ci
-    - drush -y config:import --partial --source=../config/splits/commerce_dps
-    - drush -y cron
     - until curl -s http://$HOST_PORT; do true; done > /dev/null
     - curl -o tmp/index.html -s http://$HOST_PORT
     - cd tests/cypress
@@ -234,11 +263,6 @@ cypress:
   script:
     - cp cypress.ci.env.json cypress.env.json
     - cypress run
-  after_script:
-    - pwd
-    - cd ${CI_PROJECT_DIR}
-    - ${CI_PROJECT_DIR}/vendor/bin/drush sql:dump --result-file=${CI_PROJECT_DIR}/tmp/db.sql --gzip
-    - COLUMNS=240 ${CI_PROJECT_DIR}/vendor/bin/drush watchdog:show --count=50000 > ${CI_PROJECT_DIR}/tmp/drupal-log-messages.txt
   artifacts:
     when: always
     name: "artifacts-${CI_JOB_NAME}-${CI_COMMIT_SHA}"
