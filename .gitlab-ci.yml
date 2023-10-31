@@ -52,6 +52,33 @@ lint drupal:
   script:
     - php vendor/bin/grumphp run --testsuite=ci
 
+drupal install:
+  extends: .cache_strategy_pull
+  stage: build
+  needs:
+    - composer install
+  script:
+    - mkdir -p tmp
+    - php -i > tmp/php-info.txt
+    - cp config/settings.local.php web/sites/default/
+    - ./vendor/bin/drush site-install commerce_kickstart --site-name='Commerce Demo' --no-interaction --db-url=sqlite://sites/default/files/db.sqlite
+    - chmod -R ugo+rw web/sites/default/files
+    - ./vendor/bin/drush -y pm:enable commerce_dps commerce_demo
+    - ./vendor/bin/drush -y config:import --partial --source=../config/splits/ci
+    - ./vendor/bin/drush -y config:import --partial --source=../config/splits/commerce_dps
+    - ./vendor/bin/drush -y cron
+  after_script:
+    - ./vendor/bin/drush status | tee tmp/drush-status.txt
+  artifacts:
+    when: always
+    name: "artifacts-${CI_JOB_NAME}-${CI_COMMIT_SHA}"
+    paths:
+      - composer.*
+      - config/
+      - vendor/
+      - tmp/
+      - web/
+
 behat:
   extends: .cache_strategy_pull
   services:
@@ -175,82 +202,6 @@ behat:
   script:
     - behat --colors --profile=ci --tags="${BEHAT_TAGS}"
 
-drupal install:
-  extends: .cache_strategy_pull
-  stage: test
-  needs:
-    - composer install
-  script:
-    - mkdir -p tmp
-    - php -i > tmp/php-info.txt
-    - cp config/settings.local.php web/sites/default/
-    - ./vendor/bin/drush site-install commerce_kickstart --site-name='Commerce Demo' --no-interaction --db-url=sqlite://sites/default/files/db.sqlite
-    - chmod -R ugo+rw web/sites/default/files
-    - ./vendor/bin/drush -y pm:enable commerce_dps commerce_demo
-    - ./vendor/bin/drush -y config:import --partial --source=../config/splits/ci
-    - ./vendor/bin/drush -y config:import --partial --source=../config/splits/commerce_dps
-    - ./vendor/bin/drush -y cron
-  after_script:
-    - ./vendor/bin/drush status | tee tmp/drush-status.txt
-  artifacts:
-    when: always
-    name: "artifacts-${CI_JOB_NAME}-${CI_COMMIT_SHA}"
-    paths:
-      - composer.*
-      - config/
-      - vendor/
-      - tmp/
-      - web/
-
-drupal status:
-  stage: test
-  needs:
-    - drupal install
-  script:
-    - php -i > tmp/php-info.txt
-    - ./vendor/bin/drush -v -r web status | tee tmp/drush-status.txt
-  artifacts:
-    when: always
-    name: "artifacts-${CI_JOB_NAME}-${CI_COMMIT_SHA}"
-    paths:
-      - tmp/
-
-drupal in service:
-  stage: test
-  variables:
-    FF_NETWORK_PER_BUILD: 1
-    CI_DEBUG_SERVICES: "true"
-  needs:
-    - drupal install
-  services:
-    # Entrypoint configuration from https://gitlab.com/gitlab-org/gitlab-runner/-/issues/3210#note_380999884
-    - name: devwithlando/php:8.1-apache-4
-      alias: www
-      entrypoint:
-        - '/bin/bash'
-        - '-c'
-        - |
-          # wait for project clone/checkout to complete
-          until [ -f "${CI_PROJECT_DIR}/.git/index" ]; do sleep 1; done;
-          while [ -f "${CI_PROJECT_DIR}/.git/index.lock" ]; do sleep 1; done;
-          # setup service as you need
-          mkdir -p ${CI_PROJECT_DIR}/tmp
-          cp -R "${CI_PROJECT_DIR}/config/gitlab-ci/apache-vhost.conf" "/etc/apache2/sites-enabled/000-default.conf"
-          # pass control to the default image entrypoint
-          exec /usr/local/bin/docker-php-entrypoint "$@"
-        # arg $0 should be explicitly passed when using 'bash -c' entrypoints
-        - '/bin/bash'
-      # using entrypoint means you have to pass the default image command as well
-      command:
-        - 'apache2-foreground'
-  script:
-    - curl http://www/ | tee tmp/index.html
-  artifacts:
-    when: always
-    name: "artifacts-${CI_JOB_NAME}-${CI_COMMIT_SHA}"
-    paths:
-      - tmp/
-
 cypress:
   services:
     - name: mailhog/mailhog
@@ -302,6 +253,55 @@ cypress:
       - tmp
     reports:
       junit: tests/cypress/results/*.xml
+
+pa11y:
+  cache:
+    key: ${CI_COMMIT_REF_SLUG}
+    paths:
+      - .cache/*
+      - cache/Cypress
+      - node_modules
+      - build
+  image: registry.gitlab.com/gitlab-ci-utils/gitlab-pa11y-ci:latest
+  needs:
+    - drupal install
+  stage: test
+  variables:
+    FF_NETWORK_PER_BUILD: 1
+    HOST_PORT: "www:80"
+    NODE_MAJOR: 20
+    PA11Y_THRESHOLD: 100
+  services:
+    # Entrypoint configuration from https://gitlab.com/gitlab-org/gitlab-runner/-/issues/3210#note_380999884
+    - name: devwithlando/php:8.1-apache-4
+      alias: www
+      entrypoint:
+        - '/bin/bash'
+        - '-c'
+        - |
+          # wait for project clone/checkout to complete
+          until [ -f "${CI_PROJECT_DIR}/.git/index" ]; do sleep 1; done;
+          while [ -f "${CI_PROJECT_DIR}/.git/index.lock" ]; do sleep 1; done;
+          # setup service as you need
+          mkdir -p ${CI_PROJECT_DIR}/tmp
+          cp -R "${CI_PROJECT_DIR}/config/gitlab-ci/apache-vhost.conf" "/etc/apache2/sites-enabled/000-default.conf"
+          # pass control to the default image entrypoint
+          exec /usr/local/bin/docker-php-entrypoint "$@"
+        # arg $0 should be explicitly passed when using 'bash -c' entrypoints
+        - '/bin/bash'
+      # using entrypoint means you have to pass the default image command as well
+      command:
+        - 'apache2-foreground'
+  script:
+    - pa11y-ci --threshold ${PA11Y_THRESHOLD} --reporter=json > pa11y-ci-results.json
+  artifacts:
+    # Make sure artifacts are always saved, otherwise they will not be on failure.
+    when: always
+    paths:
+      - pa11y-ci-results.json
+      - tmp
+    reports:
+      accessibility: pa11y-ci-results.json
 
 .composer audit:
   extends: .cache_strategy_pull
