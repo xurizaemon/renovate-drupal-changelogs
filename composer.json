@@ -27,10 +27,11 @@
         "drupal/core-recommended": "^10.3",
         "drupal/default_content": "^2",
         "drush/drush": "^12.5",
+        "psr/http-factory": "^1.1",
+        "symfony/filesystem": "^6.4",
         "symfony/http-client": "^6.3",
         "vlucas/phpdotenv": "^5.1",
-        "webflo/drupal-finder": "^1.2",
-        "webmozart/path-util": "^2.3"
+        "webflo/drupal-finder": "^1.2"
     },
     "require-dev": {
         "dmore/behat-chrome-extension": "^1.4",
