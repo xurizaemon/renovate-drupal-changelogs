@@ -1,25 +1,47 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "gitAuthor": "Renovate Bot <renovate@example.com>",
-  "extends": [
-    "config:base",
-    ":preserveSemverRanges",
-    ":rebaseStalePrs",
-    ":enableVulnerabilityAlertsWithLabel('security')",
-    "group:recommended"
-  ],
+  "extends": ["config:base"],
+  "branchPrefix": "deps/",
+  "labels": ["dependencies"],
+  "ignorePresets": [":prHourlyLimit2"],
+  "rangeStrategy": "update-lockfile",
+  "enabledManagers": ["composer"],
   "packageRules": [
     {
-      "managers": ["composer"],
-      "matchPackagePatterns": ["^drupal/"],
-      "rangeStrategy": "update-lockfile",
-      "groupName": "Drupal contributed modules"
+      "matchPackageNames": ["php"],
+      "enabled": false
     },
     {
-      "managers": ["composer"],
-      "matchPackagePatterns": ["^drupal/core-recommended", "^drupal/core-composer-scaffold", "^drupal/core-dev"],
-      "rangeStrategy": "update-lockfile",
-      "groupName": "Drupal core"
+      "groupName": "Major all - skipped to update manually",
+      "matchDatasources": ["packagist"],
+      "matchUpdateTypes": ["major"],
+      "matchPackagePatterns": [".*"],
+      "enabled": false
+    },
+    {
+      "groupName": "Minor and Patch Contrib",
+      "groupSlug": "minor-patch-contrib",
+      "matchDatasources": ["packagist"],
+      "separateMinorPatch": false,
+      "matchPackagePatterns": [".*"],
+      "excludePackageNames": [
+        "drupal/core-composer-scaffold",
+        "drupal/core-project-message",
+        "drupal/core-recommended"
+      ]
+    },
+    {
+      "groupName": "Minor and Patch Core",
+      "groupSlug": "minor-patch-core",
+      "schedule": ["before 2am"],
+      "matchDatasources": ["packagist"],
+      "matchUpdateTypes": ["patch", "minor"],
+      "matchPackageNames": [
+        "drupal/core-composer-scaffold",
+        "drupal/core-project-message",
+        "drupal/core-recommended"
+      ]
     }
   ]
 }
