@@ -1,0 +1,29 @@
+uuid: 8f455218-8c4f-464e-a4b6-228a36a1d2b9
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.page.body
+    - node.type.page
+  module:
+    - text
+    - user
+_core:
+  default_config_hash: 02_pmCivtyX6HugprPvP1nZ4xIbLoRnDpYraCfIK5Gg
+id: node.page.default
+targetEntityType: node
+bundle: page
+mode: default
+content:
+  body:
+    label: hidden
+    type: text_default
+    weight: 100
+    settings: {  }
+    third_party_settings: {  }
+    region: content
+  links:
+    weight: 101
+    region: content
+hidden:
+  search_api_excerpt: true

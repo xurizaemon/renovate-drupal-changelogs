@@ -1,0 +1,20 @@
+uuid: 8eb577ca-d0f3-4049-ab81-13d1c7ec6e69
+langcode: en
+status: true
+dependencies: {  }
+_core:
+  default_config_hash: 7WoLLLhl8OFdTzOV44Q5DNIBr0-iilYpE-JKlSRmvqA
+id: ddev_smtp
+label: 'ddev SMTP'
+plugin: smtp
+configuration:
+  user: ''
+  pass: ''
+  host: 127.0.0.1
+  port: 1025
+  query:
+    verify_peer: true
+    local_domain: ''
+    restart_threshold: null
+    restart_threshold_sleep: null
+    ping_threshold: null
