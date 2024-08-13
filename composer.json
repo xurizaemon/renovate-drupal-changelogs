@@ -22,10 +22,11 @@
         "cweagans/composer-patches": "^1.7",
         "drupal/commerce_demo": "^3.0",
         "drupal/commerce_dps": "2.0.x-dev",
+        "drupal/core": "^10.3",
         "drupal/core-composer-scaffold": "^10",
-        "drupal/core-recommended": "^10",
+        "drupal/core-recommended": "^10.3",
         "drupal/default_content": "^2",
-        "drush/drush": "^12.2",
+        "drush/drush": "^12.5",
         "symfony/http-client": "^6.3",
         "vlucas/phpdotenv": "^5.1",
         "webflo/drupal-finder": "^1.2",
@@ -36,7 +37,7 @@
         "drevops/behat-format-progress-fail": "^1.0",
         "drevops/behat-screenshot": "^1.2",
         "drevops/behat-steps": "^2.0",
-        "drupal/core-dev": "^10",
+        "drupal/core-dev": "^10.3",
         "drupal/drupal-driver": "^2.2",
         "drupal/drupal-extension": "^5.0@RC",
         "phpro/grumphp-shim": "^2.0",
@@ -148,9 +149,6 @@
             "drupal/default_content": "-p1"
         },
         "patches": {
-            "drupal/commerce_dps": {
-                "#3275719: PHP8 / Drupal 10": "https://git.drupalcode.org/project/commerce_dps/-/merge_requests/11.patch"
-            },
             "drupal/default_content": {
                 "#3160146 Add a Normalizer and Denormalizer to support Layout Builder": "https://www.drupal.org/files/issues/2022-12-06/default_content-3160146-53.patch"
             }
