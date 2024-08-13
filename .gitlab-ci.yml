@@ -303,12 +303,13 @@ pa11y:
     reports:
       accessibility: pa11y-ci-results.json
 
-.composer audit:
+composer audit:
   extends: .cache_strategy_pull
   stage: check
   needs:
     - composer install
   script:
+    - composer self-update
     - composer audit -v --no-ansi | tee composer-audit.txt
   allow_failure: true
   artifacts:
@@ -330,20 +331,6 @@ composer outdated:
     name: "artifacts-${CI_JOB_NAME}-${CI_COMMIT_SHA}"
     paths:
       - composer-outdated.txt
-
-drush pm-security:
-  extends: .cache_strategy_pull
-  stage: check
-  needs:
-    - composer install
-  script:
-    - ./vendor/bin/drush pm:security | tee drush-security.txt
-  allow_failure: true
-  artifacts:
-    when: always
-    name: "artifacts-${CI_JOB_NAME}-${CI_COMMIT_SHA}"
-    paths:
-      - drush-security.txt
 
 report dependencies:
   stage: check
