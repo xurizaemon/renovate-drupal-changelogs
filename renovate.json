@@ -1,6 +1,6 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "gitAuthor": "Renovate Bot <renovate@example.com>",
+  "gitAuthor": "Renovate Bot <renovate@grdev.co.nz>",
   "extends": ["config:base"],
   "branchPrefix": "deps/",
   "labels": ["dependencies"],
