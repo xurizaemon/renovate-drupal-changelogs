@@ -56,7 +56,8 @@
       "groupSlug": "minor-patch-core",
       "schedule": [
         "before 2am"
-      ]
+      ],
+      "separateMinorPatch": true
     },
     {
       "matchDatasources": [
