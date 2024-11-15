@@ -1,0 +1,22 @@
+uuid: 23fe50fb-cecc-4d20-8990-f7013629c7c9
+langcode: en
+status: true
+dependencies:
+  module:
+    - system
+  theme:
+    - centarro_claro
+_core:
+  default_config_hash: VffWQmRxsoFhuuCL5_ykunS8JDdZZneddyFH5jhBawA
+id: centarro_claro_messages
+theme: centarro_claro
+region: highlighted
+weight: 0
+provider: null
+plugin: system_messages_block
+settings:
+  id: system_messages_block
+  label: 'Status messages'
+  label_display: '0'
+  provider: system
+visibility: {  }

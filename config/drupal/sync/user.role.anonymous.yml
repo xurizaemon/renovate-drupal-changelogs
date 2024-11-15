@@ -1,0 +1,24 @@
+uuid: cd81183c-4e0d-40d6-a183-ffe54517dc0e
+langcode: en
+status: true
+dependencies:
+  config:
+    - filter.format.restricted_html
+  module:
+    - comment
+    - commerce_checkout
+    - commerce_product
+    - filter
+    - system
+_core:
+  default_config_hash: j5zLMOdJBqC0bMvSdth5UebkprJB8g_2FXHqhfpJzow
+id: anonymous
+label: 'Anonymous user'
+weight: 0
+is_admin: false
+permissions:
+  - 'access checkout'
+  - 'access comments'
+  - 'access content'
+  - 'use text format restricted_html'
+  - 'view commerce_product'
