@@ -14,7 +14,7 @@ Feature: purchase
     And I fill in "Username" with "<?username>" in the "LoginNewCustomer" region
     And I fill in "Password" with "Password123!" in the "LoginNewCustomer" region
     And I fill in "Confirm password" with "Password123!" in the "LoginNewCustomer" region
-    And I press "Create account and continue"
+    And I press "Create new account and continue"
     Then I select "United States" from "Country"
     And I wait for AJAX to finish
     And I select "California" from "State"
