@@ -1,29 +1,30 @@
 {
-  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "gitAuthor": "Renovate Bot <renovate@grdev.co.nz>",
-  "extends": [
-    "config:recommended"
+  "assignees": [
+    "xurizaemon"
+  ],
+  "automerge": false,
+  "automergeSchedule": [
+    "every weekend"
+  ],
+  "baseBranches": [
+    "main"
   ],
   "branchPrefix": "deps/",
+  "extends": [
+    "config:recommended",
+    "group:symfony"
+  ],
   "labels": [
     "dependencies"
   ],
-  "ignorePresets": [
-    ":prHourlyLimit2"
-  ],
-  "rangeStrategy": "update-lockfile",
-  "enabledManagers": [
-    "composer"
-  ],
   "packageRules": [
     {
-      "matchPackageNames": [
+      "matchDepNames": [
         "php"
       ],
       "enabled": false
     },
     {
-      "groupName": "Major all - skipped to update manually",
       "matchDatasources": [
         "packagist"
       ],
@@ -31,42 +32,73 @@
         "major"
       ],
       "enabled": false,
-      "matchPackageNames": [
-        "/.*/"
+      "groupName": "Major all - skipped to update manually",
+      "matchPackagePatterns": [
+        ".*"
       ]
     },
     {
-      "groupName": "Minor and Patch Contrib",
-      "groupSlug": "minor-patch-contrib",
       "matchDatasources": [
         "packagist"
       ],
-      "separateMinorPatch": false,
-      "matchPackageNames": [
-        "/.*/",
-        "!drupal/core-composer-scaffold",
-        "!drupal/core-project-message",
-        "!drupal/core-recommended"
-      ]
-    },
-    {
-      "groupName": "Minor and Patch Core",
-      "groupSlug": "minor-patch-core",
-      "schedule": [
-        "before 2am"
-      ],
-      "matchDatasources": [
-        "packagist"
+      "matchDepNames": [
+        "drupal/core-composer-scaffold",
+        "drupal/core-dev",
+        "drupal/core-project-message",
+        "drupal/core-recommended"
       ],
       "matchUpdateTypes": [
         "patch",
         "minor"
       ],
-      "matchPackageNames": [
+      "prPriority": 30,
+      "groupName": "Minor and patch - Drupal Core",
+      "groupSlug": "minor-patch-core",
+      "schedule": [
+        "before 2am"
+      ]
+    },
+    {
+      "matchDatasources": [
+        "packagist"
+      ],
+      "prPriority": 20,
+      "excludePackageNames": [
         "drupal/core-composer-scaffold",
+        "drupal/core-dev",
         "drupal/core-project-message",
         "drupal/core-recommended"
+      ],
+      "groupName": "Minor and patch - Contrib",
+      "groupSlug": "minor-patch-contrib",
+      "matchPackagePatterns": [
+        ".*"
+      ],
+      "separateMinorPatch": false
+    },
+    {
+      "matchDatasources": [
+        "npm"
+      ],
+      "matchUpdateTypes": [
+        "patch",
+        "minor"
+      ],
+      "prPriority": 30,
+      "groupName": "NPM updates",
+      "groupSlug": "npm-updates",
+      "paths": [
+        "web/modules/custom/*/package.json",
+        "web/themes/custom/*/package.json"
+      ],
+      "schedule": [
+        "before 2am"
       ]
     }
-  ]
+  ],
+  "prConcurrentLimit": 1,
+  "rangeStrategy": "bump",
+  "rebaseWhen": "auto",
+  "timezone": "Pacific/Auckland",
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json"
 }
