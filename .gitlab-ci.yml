@@ -362,3 +362,18 @@ renovate:
     - if: '$CI_PIPELINE_SOURCE == "schedule"'
     - if: '$CI_PIPELINE_SOURCE == "web"'
       when: manual
+
+composer changes:
+  needs: [  ]
+  stage: check
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      changes:
+        - composer.lock
+  allow_failure: true
+  script:
+    - PATH=$PATH:$( composer global config home )/vendor/bin
+    - git fetch origin
+    - composer global require davidrjonas/composer-lock-diff:^1.0
+    - composer-lock-diff --from origin/$CI_MERGE_REQUEST_TARGET_BRANCH_NAME --md | tee composer-changes.txt
+
