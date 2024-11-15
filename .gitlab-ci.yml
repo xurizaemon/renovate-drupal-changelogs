@@ -347,3 +347,18 @@ report dependencies:
       cyclonedx:
         - gl-sbom-composer.cdx.json
   allow_failure: true
+
+renovate:
+  needs: [  ]
+  image: renovate/renovate
+  variables:
+    RENOVATE_CONFIG_FILE: ${CI_PROJECT_DIR}/config/renovate/config.js
+    RENOVATE_GIT_AUTHOR: Renovate Bot <renovate@grdev.co.nz>
+    RENOVATE_TOKEN: ${GITLAB_ACCESS_TOKEN}
+    # LOG_LEVEL: debug
+  script:
+    - renovate $RENOVATE_EXTRA_FLAGS
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "schedule"'
+    - if: '$CI_PIPELINE_SOURCE == "web"'
+      when: manual
