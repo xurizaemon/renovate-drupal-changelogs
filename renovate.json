@@ -1,42 +1,67 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "gitAuthor": "Renovate Bot <renovate@example.com>",
-  "extends": ["config:base"],
+  "extends": [
+    "config:recommended"
+  ],
   "branchPrefix": "deps/",
-  "labels": ["dependencies"],
-  "ignorePresets": [":prHourlyLimit2"],
+  "labels": [
+    "dependencies"
+  ],
+  "ignorePresets": [
+    ":prHourlyLimit2"
+  ],
   "rangeStrategy": "update-lockfile",
-  "enabledManagers": ["composer"],
+  "enabledManagers": [
+    "composer"
+  ],
   "packageRules": [
     {
-      "matchPackageNames": ["php"],
+      "matchPackageNames": [
+        "php"
+      ],
       "enabled": false
     },
     {
       "groupName": "Major all - skipped to update manually",
-      "matchDatasources": ["packagist"],
-      "matchUpdateTypes": ["major"],
-      "matchPackagePatterns": [".*"],
-      "enabled": false
+      "matchDatasources": [
+        "packagist"
+      ],
+      "matchUpdateTypes": [
+        "major"
+      ],
+      "enabled": false,
+      "matchPackageNames": [
+        "/.*/"
+      ]
     },
     {
       "groupName": "Minor and Patch Contrib",
       "groupSlug": "minor-patch-contrib",
-      "matchDatasources": ["packagist"],
+      "matchDatasources": [
+        "packagist"
+      ],
       "separateMinorPatch": false,
-      "matchPackagePatterns": [".*"],
-      "excludePackageNames": [
-        "drupal/core-composer-scaffold",
-        "drupal/core-project-message",
-        "drupal/core-recommended"
+      "matchPackageNames": [
+        "/.*/",
+        "!drupal/core-composer-scaffold",
+        "!drupal/core-project-message",
+        "!drupal/core-recommended"
       ]
     },
     {
       "groupName": "Minor and Patch Core",
       "groupSlug": "minor-patch-core",
-      "schedule": ["before 2am"],
-      "matchDatasources": ["packagist"],
-      "matchUpdateTypes": ["patch", "minor"],
+      "schedule": [
+        "before 2am"
+      ],
+      "matchDatasources": [
+        "packagist"
+      ],
+      "matchUpdateTypes": [
+        "patch",
+        "minor"
+      ],
       "matchPackageNames": [
         "drupal/core-composer-scaffold",
         "drupal/core-project-message",
