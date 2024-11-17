@@ -1,11 +1,11 @@
-uuid: 6a37a8b6-114c-4403-ae5a-29baa58b7ea6
+uuid: e0616cf3-0bec-48a0-91b0-239bc3ba6ded
 langcode: en
 status: true
 dependencies:
   module:
     - profile
 _core:
-  default_config_hash: iDeLvK90ucO3Qc2NIH8ot0W1saUd7U_XThA3P1QvuMs
+  default_config_hash: uWCBdBOsZXaAksioEC9EiROyHAycrGYh8RxoUqMGiCE
 id: profiles
 label: Profiles
 module: views
@@ -182,7 +182,6 @@ display:
           exposed: false
           expose:
             label: ''
-            field_identifier: is_default
           entity_type: profile
           entity_field: is_default
           plugin_id: standard
@@ -197,7 +196,6 @@ display:
           exposed: false
           expose:
             label: ''
-            field_identifier: profile_id
           entity_type: profile
           entity_field: profile_id
           plugin_id: standard
@@ -236,7 +234,6 @@ display:
           default_argument_type: user
           default_argument_options:
             user: false
-          default_argument_skip_url: false
           summary_options:
             base_path: ''
             count: true
@@ -273,7 +270,6 @@ display:
           default_argument_type: fixed
           default_argument_options:
             argument: ''
-          default_argument_skip_url: false
           summary_options:
             base_path: ''
             count: true
@@ -314,7 +310,6 @@ display:
           default_argument_type: fixed
           default_argument_options:
             argument: ''
-          default_argument_skip_url: false
           summary_options:
             base_path: ''
             count: true

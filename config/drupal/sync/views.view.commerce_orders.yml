@@ -1,4 +1,4 @@
-uuid: 28eb2dfd-4bf2-4e4c-8a0a-3ce536793ae6
+uuid: d49c26db-ca5a-46e2-aed4-6ee87d2b4630
 langcode: en
 status: true
 dependencies:
@@ -334,6 +334,15 @@ display:
             date_format: short
             custom_date_format: ''
             timezone: ''
+            tooltip:
+              date_format: ''
+              custom_date_format: ''
+            time_diff:
+              enabled: false
+              future_format: '@interval hence'
+              past_format: '@interval ago'
+              granularity: 2
+              refresh: 60
           group_column: value
           group_columns: {  }
           group_rows: true
@@ -816,7 +825,6 @@ display:
               authenticated: authenticated
               anonymous: '0'
               administrator: '0'
-            operator_list: {  }
           is_grouped: false
           group_info:
             label: ''
@@ -860,7 +868,6 @@ display:
               administrator: '0'
             reduce: false
             hide_single_bundle: true
-            operator_list: {  }
           is_grouped: false
           group_info:
             label: ''
@@ -903,7 +910,6 @@ display:
               anonymous: '0'
               administrator: '0'
             reduce: false
-            operator_list: {  }
           is_grouped: false
           group_info:
             label: ''

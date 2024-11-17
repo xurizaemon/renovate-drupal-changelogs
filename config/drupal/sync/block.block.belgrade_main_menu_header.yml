@@ -1,4 +1,4 @@
-uuid: e88c1029-cf46-4911-8959-83176826e5f5
+uuid: f1ac056e-f3d6-4b8e-a0cc-849f0ff4659c
 langcode: en
 status: true
 dependencies:
@@ -9,16 +9,16 @@ dependencies:
   theme:
     - belgrade
 _core:
-  default_config_hash: 63FLrk7BpcLU-5YLZwWVCOtOMozD8mSzBytCiu0Oznc
-id: belgrade_main_menu
+  default_config_hash: AA8QZMYUufEoxWQtJSJUWpYh8KBN7SLCckigtlPAneI
+id: belgrade_main_menu_header
 theme: belgrade
-region: navigation
-weight: -7
+region: header
+weight: -8
 provider: null
 plugin: 'system_menu_block:main'
 settings:
   id: 'system_menu_block:main'
-  label: 'Main navigation'
+  label: 'Main navigation header'
   label_display: '0'
   provider: system
   level: 1

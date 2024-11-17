@@ -155,7 +155,6 @@ $settings['skip_permissions_hardening'] = TRUE;
 # $settings['config_exclude_modules'] = ['devel', 'stage_file_proxy'];
 ini_set('memory_limit', '1024m');
 
-$settings['config_sync_directory'] = '../config/sync';
 $settings['file_private_path'] = '../files/private';
 $settings['file_temp_path'] = '/tmp';
 

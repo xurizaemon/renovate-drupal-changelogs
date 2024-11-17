@@ -1,4 +1,4 @@
-uuid: 626a6d0b-9996-41e5-a6d8-8a5081932aef
+uuid: b2ee1e07-1485-4da6-b069-22bfe072075e
 langcode: en
 status: true
 dependencies:
@@ -145,6 +145,15 @@ display:
             date_format: medium
             custom_date_format: ''
             timezone: ''
+            tooltip:
+              date_format: ''
+              custom_date_format: ''
+            time_diff:
+              enabled: false
+              future_format: '@interval hence'
+              past_format: '@interval ago'
+              granularity: 2
+              refresh: 60
           group_column: value
           group_columns: {  }
           group_rows: true
@@ -287,7 +296,6 @@ display:
           exposed: false
           expose:
             label: ''
-            field_identifier: log_id
           entity_type: commerce_log
           entity_field: log_id
           plugin_id: standard

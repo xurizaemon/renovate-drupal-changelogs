@@ -1,4 +1,4 @@
-image: devwithlando/php:8.1-apache-4
+image: devwithlando/php:8.2-apache-4
 
 stages:
   - build
@@ -64,8 +64,8 @@ drupal install:
     - ./vendor/bin/drush site-install commerce_kickstart --site-name='Commerce Demo' --no-interaction --db-url=sqlite://sites/default/files/db.sqlite
     - chmod -R ugo+rw web/sites/default/files
     - ./vendor/bin/drush -y pm:enable commerce_dps commerce_demo
-    - ./vendor/bin/drush -y config:import --partial --source=../config/splits/ci
-    - ./vendor/bin/drush -y config:import --partial --source=../config/splits/commerce_dps
+    - ./vendor/bin/drush -y config:import --partial --source=../config/drupal/splits/ci
+    - ./vendor/bin/drush -y config:import --partial --source=../config/drupal/splits/commerce_dps
     - ./vendor/bin/drush -y cron
   after_script:
     - ./vendor/bin/drush status | tee tmp/drush-status.txt
@@ -273,7 +273,7 @@ pa11y:
     PA11Y_THRESHOLD: 100
   services:
     # Entrypoint configuration from https://gitlab.com/gitlab-org/gitlab-runner/-/issues/3210#note_380999884
-    - name: devwithlando/php:8.1-apache-4
+    - name: devwithlando/php:8.2-apache-4
       alias: www
       entrypoint:
         - '/bin/bash'
@@ -362,3 +362,18 @@ renovate:
     - if: '$CI_PIPELINE_SOURCE == "schedule"'
     - if: '$CI_PIPELINE_SOURCE == "web"'
       when: manual
+
+composer changes:
+  needs: [  ]
+  stage: check
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      changes:
+        - composer.lock
+  allow_failure: true
+  script:
+    - PATH=$PATH:$( composer global config home )/vendor/bin
+    - git fetch origin
+    - composer global require davidrjonas/composer-lock-diff:^1.0
+    - composer-lock-diff --from origin/$CI_MERGE_REQUEST_TARGET_BRANCH_NAME --md | tee composer-changes.txt
+

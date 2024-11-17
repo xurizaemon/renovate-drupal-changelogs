@@ -1,4 +1,4 @@
-uuid: a60212b2-25eb-4ec4-9101-28e30b3b0438
+uuid: 21ddf5c8-12d3-44db-b4bd-43e513f32af4
 langcode: en
 status: true
 dependencies:
@@ -307,7 +307,6 @@ display:
             multiple: false
             remember_roles:
               authenticated: authenticated
-            operator_list: {  }
           is_grouped: false
           group_info:
             label: ''
@@ -335,7 +334,6 @@ display:
           exposed: false
           expose:
             label: ''
-            field_identifier: order_item_id
           entity_type: commerce_order_item
           entity_field: order_item_id
           plugin_id: standard

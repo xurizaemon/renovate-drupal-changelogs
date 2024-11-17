@@ -1,4 +1,4 @@
-uuid: f048e394-4e15-432e-8e00-350ac9f5ce63
+uuid: c3619626-7561-49a6-b8ad-fbaec80ef84d
 langcode: en
 status: true
 dependencies:
@@ -414,7 +414,6 @@ display:
           exposed: false
           expose:
             label: ''
-            field_identifier: id
           entity_type: commerce_promotion_coupon
           entity_field: id
           plugin_id: standard

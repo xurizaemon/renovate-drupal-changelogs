@@ -1,4 +1,4 @@
-uuid: f09f53f1-228d-4939-ab8a-b58faa8c39eb
+uuid: cea8d42d-40c3-4d77-aa77-fa27234f326b
 langcode: en
 status: true
 dependencies:
@@ -9,7 +9,7 @@ dependencies:
     - state_machine
     - user
 _core:
-  default_config_hash: ixfojlMdSpKQCFLyPcNv8yfWcracf58Oxi0O5Kzu_EE
+  default_config_hash: 5r8LSKB5sDwIDzghBw9wCUuqQ1ZJFR1WaHQx_gVvVPI
 id: commerce_user_orders
 label: 'User orders'
 module: views
@@ -206,7 +206,7 @@ display:
             alter_text: false
             text: ''
             make_link: true
-            path: 'user/{{ arguments.uid }}/orders/{{ order_id }}'
+            path: 'user/{{ raw_arguments.uid }}/orders/{{ order_id }}'
             absolute: false
             external: false
             replace_spaces: false
@@ -312,6 +312,15 @@ display:
             date_format: short
             custom_date_format: ''
             timezone: ''
+            tooltip:
+              date_format: ''
+              custom_date_format: ''
+            time_diff:
+              enabled: false
+              future_format: '@interval hence'
+              past_format: '@interval ago'
+              granularity: 2
+              refresh: 60
           group_column: value
           group_columns: {  }
           group_rows: true
@@ -482,7 +491,6 @@ display:
             remember_roles:
               authenticated: authenticated
             reduce: false
-            operator_list: {  }
           is_grouped: false
           group_info:
             label: ''
@@ -550,7 +558,7 @@ display:
             type: commerce_current_user
             fail: 'not found'
           validate_options:
-            admin_permission: 'administer commerce_order'
+            admin_permission: 'view commerce_order'
           break_phrase: false
           not: false
           entity_type: commerce_order

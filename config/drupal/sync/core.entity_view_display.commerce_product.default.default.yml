@@ -1,4 +1,4 @@
-uuid: cf7fe1a3-09fd-494b-bddd-0c394eed57fa
+uuid: 5eb3055e-50ca-4da0-8334-3578cee17de0
 langcode: en
 status: true
 dependencies:
@@ -6,9 +6,6 @@ dependencies:
     - commerce_product.commerce_product_type.default
     - field.field.commerce_product.default.body
     - field.field.commerce_product.default.images
-    - field.field.commerce_product.default.product_brand
-    - field.field.commerce_product.default.product_collections
-    - field.field.commerce_product.default.product_tags
   module:
     - commerce_product
     - text
@@ -47,8 +44,5 @@ content:
 hidden:
   created: true
   images: true
-  product_brand: true
-  product_collections: true
-  product_tags: true
   stores: true
   uid: true

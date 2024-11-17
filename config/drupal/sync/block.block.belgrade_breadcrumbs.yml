@@ -1,4 +1,4 @@
-uuid: f1be797e-c6de-432b-932a-aebd8e25b7d1
+uuid: 2beb50ce-2c36-4cc1-a140-ed9ddf89f679
 langcode: en
 status: true
 dependencies:
@@ -7,7 +7,7 @@ dependencies:
   theme:
     - belgrade
 _core:
-  default_config_hash: gFP0JCgudHamwh8VMcLQbluc5p1-aGIXQwlsKZ9K2hk
+  default_config_hash: o9654zFbOpjd88E5j5l4Cby3t-WwUuTfQ6xcKSLsodg
 id: belgrade_breadcrumbs
 theme: belgrade
 region: highlighted
@@ -23,4 +23,4 @@ visibility:
   request_path:
     id: request_path
     negate: true
-    pages: "/cart*\r\n/checkout*"
+    pages: "/cart*\r\n/checkout*\r\n<front>"

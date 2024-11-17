@@ -1,4 +1,4 @@
-uuid: 0a9f8779-de59-43d5-af6d-f4463c077c51
+uuid: 6aae2416-a53e-4c98-947f-b4f9a68d0da3
 langcode: en
 status: true
 dependencies:
@@ -6,9 +6,6 @@ dependencies:
     - commerce_product.commerce_product_type.default
     - field.field.commerce_product.default.body
     - field.field.commerce_product.default.images
-    - field.field.commerce_product.default.product_brand
-    - field.field.commerce_product.default.product_collections
-    - field.field.commerce_product.default.product_tags
   module:
     - commerce
     - path
@@ -78,7 +75,4 @@ content:
     third_party_settings: {  }
 hidden:
   images: true
-  product_brand: true
-  product_collections: true
-  product_tags: true
   variations: true

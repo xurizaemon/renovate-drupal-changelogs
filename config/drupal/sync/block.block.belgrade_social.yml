@@ -1,4 +1,4 @@
-uuid: 917a7c20-8a7e-471f-b764-e435384fc15a
+uuid: 0552dd4b-9776-49de-b82c-a3c04102e11c
 langcode: en
 status: true
 dependencies:
@@ -18,7 +18,7 @@ provider: null
 plugin: 'system_menu_block:social'
 settings:
   id: 'system_menu_block:social'
-  label: 'Let''s get social'
+  label: "Let's get social"
   label_display: visible
   provider: system
   level: 1

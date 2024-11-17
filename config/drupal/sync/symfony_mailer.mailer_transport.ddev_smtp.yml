@@ -1,4 +1,4 @@
-uuid: d74a9ecd-ed45-4205-88f2-40efb45f3b2c
+uuid: b8d7c320-6957-4162-9e73-e0def2090c48
 langcode: en
 status: true
 dependencies: {  }
@@ -12,3 +12,9 @@ configuration:
   pass: ''
   host: 127.0.0.1
   port: 1025
+  query:
+    verify_peer: true
+    local_domain: ''
+    restart_threshold: null
+    restart_threshold_sleep: null
+    ping_threshold: null

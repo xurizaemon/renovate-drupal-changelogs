@@ -1,4 +1,4 @@
-uuid: 76fb2cb3-8b50-4da4-8255-fcc54ac68f8a
+uuid: 97a8d7f8-d244-4478-80fe-a458c86688d4
 langcode: en
 status: true
 dependencies:
@@ -8,7 +8,7 @@ dependencies:
   module:
     - address
 _core:
-  default_config_hash: 0lW9atu6EsqDPufp7ZJ4IVzmKSzeZv0vhbHwZ2fIh8k
+  default_config_hash: FOL3MwTOMLofnjg4T-VREfe6NAxA7UXcEP-Q-4K9qOI
 id: profile.customer.address
 field_name: address
 entity_type: profile
@@ -34,5 +34,7 @@ settings:
     additionalName: additionalName
     familyName: familyName
   langcode_override: ''
-  field_overrides: {  }
+  field_overrides:
+    addressLine3:
+      override: hidden
 field_type: address

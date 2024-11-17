@@ -1,11 +1,11 @@
-uuid: 5136dffd-39c2-4663-a05d-002af316d941
+uuid: 5c361278-055b-48f8-bd77-579f9dfa82a1
 langcode: en
 status: true
 dependencies:
   module:
     - block
 _core:
-  default_config_hash: DI2aQ7IbaYrwUfiwSn-3g-ANh_t7LzQ1JkRqd1ujgFs
+  default_config_hash: pG6QAggTrD7RQWb79PT3NH48GSvTiePly_l53f3OENs
 id: block-layout
 label: 'Block Layout Page'
 module: block
@@ -32,7 +32,7 @@ tips:
     label: 'Block Region'
     weight: 3
     selector: .block-region-select
-    body: 'Assign or change the region of a block by clicking here. A dropdown list with all the regions will appear.You can place one block in multiple regions.'
+    body: 'Assign or change the region of a block by clicking here. A dropdown list with all the regions will appear. You can place one block in multiple regions.'
   configure-block:
     id: configure-block
     plugin: text
@@ -40,9 +40,3 @@ tips:
     weight: 4
     selector: .dropbutton-widget
     body: 'By Clicking on "Configure" you can go ahead and edit the contents of the block, deal with the visibility settings and even change the placement of where it is on your theme.'
-  custom-block-library:
-    id: custom-block-library
-    plugin: text
-    label: 'Custom Block Library'
-    weight: 5
-    body: 'The block management screen also has an another tab on the top which is used to add Custom blocks. The name of the tab is "Custom block library". This tab ultimately provides a link to add custom blocks.'

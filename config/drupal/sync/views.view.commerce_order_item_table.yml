@@ -1,4 +1,4 @@
-uuid: 7983ebae-0316-4bf4-9dad-776443bb20b0
+uuid: bb2bebc3-2e3d-4210-998b-1c4ede72f071
 langcode: en
 status: true
 dependencies:
@@ -6,12 +6,12 @@ dependencies:
     - commerce_order
     - commerce_price
 _core:
-  default_config_hash: EZYKCbgxvY_dDDwK9piZCx6wll1ArPTjellGybiFv10
+  default_config_hash: VS41sBCRp1AVK6Kmnxe_DF0sq6pVdJHp81Obe_Y-sdg
 id: commerce_order_item_table
 label: 'Order items'
 module: views
 description: 'Display a set of order items in a table.'
-tag: ''
+tag: commerce_order_item_table
 base_table: commerce_order_item
 base_field: order_item_id
 display:

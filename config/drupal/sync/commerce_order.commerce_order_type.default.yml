@@ -1,21 +1,17 @@
-uuid: 58fb5267-4ffd-4554-a3ab-9f4857b81483
+uuid: 77bceb48-4864-4090-b0c6-5078382d49da
 langcode: en
 status: true
 dependencies: {  }
-third_party_settings:
-  commerce_checkout:
-    checkout_flow: shipping
-  commerce_shipping:
-    shipment_type: default
 _core:
-  default_config_hash: bROz7kd1J83kDf06qdZztYFSezi6UrfwftyJo53rNt4
-id: default
+  default_config_hash: kYapI397yx2zFJGyDEs85Hyqgfc9jhmzxqPZMl2Fqhk
 label: Default
-traits: {  }
-locked: false
+id: default
 workflow: order_default
 numberPattern: order_default
 refresh_mode: customer
 refresh_frequency: 300
 sendReceipt: true
 receiptBcc: ''
+receiptSubject: ''
+traits: {  }
+locked: false
