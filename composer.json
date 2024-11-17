@@ -14,7 +14,7 @@
         }
     ],
     "require": {
-        "php": ">=8.2",
+        "php": ">=8.2 <8.3",
         "ext-curl": "*",
         "centarro/certified-projects": "^1.0",
         "centarro/commerce_kickstart": "^3.0",
@@ -103,6 +103,9 @@
             "phpstan/extension-installer": true,
             "php-http/discovery": true,
             "phpro/grumphp-shim": true
+        },
+        "platform": {
+            "php": "8.2"
         },
         "sort-packages": true
     },
