@@ -14,8 +14,10 @@ describe('Commerce purchase', () => {
       .click()
     cy.get('input#edit-checkout')
       .click()
-    cy.get('h1.page-title')
-      .should('contain', 'Login')
+    cy.get('div.checkout-pane-login')
+      .should('contain', 'Returning Customer')
+    cy.get('div.checkout-pane-login')
+      .should('contain', 'New Customer')
 
     // Checkout page 1: Register account.
     cy.get('input#edit-login-register-mail')
