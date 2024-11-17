@@ -363,6 +363,17 @@ renovate:
     - if: '$CI_PIPELINE_SOURCE == "web"'
       when: manual
 
+renovate config validator:
+  needs: [  ]
+  stage: lint
+  image: renovate/renovate
+  variables:
+    RENOVATE_CONFIG_FILE: ${CI_PROJECT_DIR}/config/renovate/config.js
+  script:
+    - renovate-config-validator $RENOVATE_EXTRA_FLAGS
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+
 composer changes:
   needs: [  ]
   stage: check
