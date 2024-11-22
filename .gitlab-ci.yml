@@ -335,17 +335,40 @@ composer outdated:
 report dependencies:
   stage: check
   image: composer:2
+  rules:
+    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
   needs:
     - composer install
   before_script:
+    - mkdir -p tmp
     - composer global config --no-plugins allow-plugins.cyclonedx/cyclonedx-php-composer true
     - composer global require cyclonedx/cyclonedx-php-composer
   script:
-    - composer CycloneDX:make-sbom --output-format=JSON --output-file="$PWD/gl-sbom-composer.cdx.json"
+    - composer CycloneDX:make-sbom --output-format=JSON --output-file="${CI_PROJECT_DIR}/tmp/gl-sbom-composer.cdx.json"
+    - >
+      if [ -z "${DEPENDENCYTRACK_API_KEY+x}" -o -z "${DEPENDENCYTRACK_API_URL+x}" -o -z "${DEPENDENCYTRACK_PROJECT+x}" ]; then
+        echo "Configure DEPENDENCYTRACK_API_KEY, DEPENDENCYTRACK_API_URL and DEPENDENCYTRACK_PROJECT to report to Dependency Track."
+        exit 0
+      fi
+    - composer CycloneDX:make-sbom --output-format=XML --output-file="${CI_PROJECT_DIR}/tmp/gl-sbom-composer.cdx.xml"
+    - >
+      echo "{
+        \"project\": \"${DEPENDENCYTRACK_PROJECT}\",
+        \"bom\": \"$( base64 ${CI_PROJECT_DIR}/tmp/gl-sbom-composer.cdx.xml )\"
+      }" > ${CI_PROJECT_DIR}/tmp/dt-sbom-composer.cdx.json
+    - >
+      curl -X "PUT" "${DEPENDENCYTRACK_API_URL}/api/v1/bom" \
+        -H "Content-Type: application/json" \
+        -H "X-API-Key: ${DEPENDENCYTRACK_API_KEY}" \
+        -d @${CI_PROJECT_DIR}/tmp/dt-sbom-composer.cdx.json
   artifacts:
+    paths:
+      - tmp/gl-sbom-composer.cdx.json
+      - tmp/gl-sbom-composer.cdx.xml
+      - tmp/dt-sbom-composer.cdx.json
     reports:
       cyclonedx:
-        - gl-sbom-composer.cdx.json
+        - tmp/gl-sbom-composer.cdx.json
   allow_failure: true
 
 renovate:
