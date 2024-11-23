@@ -337,38 +337,37 @@ report dependencies:
   image: composer:2
   rules:
     - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
   needs:
     - composer install
   before_script:
-    - mkdir -p tmp
+    # Verify that the required variables have been configured in Gitlab CI/CD Variables before proceeding.
+    - >
+      if [ -z "${DEPENDENCYTRACK_API_KEY}" -o -z "${DEPENDENCYTRACK_API_URL}" -o -z "${DEPENDENCYTRACK_PROJECT}" ]; then
+        echo "Configure DEPENDENCYTRACK_API_KEY, DEPENDENCYTRACK_API_URL and DEPENDENCYTRACK_PROJECT to report to Dependency Track."
+        exit 1
+      fi
     - composer global config --no-plugins allow-plugins.cyclonedx/cyclonedx-php-composer true
     - composer global require cyclonedx/cyclonedx-php-composer
   script:
-    - composer CycloneDX:make-sbom --output-format=JSON --output-file="${CI_PROJECT_DIR}/tmp/gl-sbom-composer.cdx.json"
-    - >
-      if [ -z "${DEPENDENCYTRACK_API_KEY+x}" -o -z "${DEPENDENCYTRACK_API_URL+x}" -o -z "${DEPENDENCYTRACK_PROJECT+x}" ]; then
-        echo "Configure DEPENDENCYTRACK_API_KEY, DEPENDENCYTRACK_API_URL and DEPENDENCYTRACK_PROJECT to report to Dependency Track."
-        exit 0
-      fi
-    - composer CycloneDX:make-sbom --output-format=XML --output-file="${CI_PROJECT_DIR}/tmp/gl-sbom-composer.cdx.xml"
+    # Generate an SBOM in XML format for submission.
+    - composer CycloneDX:make-sbom --output-format=XML --output-file="${CI_PROJECT_DIR}/composer-sbom.cdx.xml"
+    # Base64 encode the XML file alongside + project identifier into JSON for submission.
     - >
       echo "{
         \"project\": \"${DEPENDENCYTRACK_PROJECT}\",
-        \"bom\": \"$( base64 ${CI_PROJECT_DIR}/tmp/gl-sbom-composer.cdx.xml )\"
-      }" > ${CI_PROJECT_DIR}/tmp/dt-sbom-composer.cdx.json
+        \"bom\": \"$( base64 --wrap=0 ${CI_PROJECT_DIR}/composer-sbom.cdx.xml )\"
+      }" > ${CI_PROJECT_DIR}/report-bom.json
+    # PUT the JSON to Dependency Track endpoint.
     - >
       curl -X "PUT" "${DEPENDENCYTRACK_API_URL}/api/v1/bom" \
         -H "Content-Type: application/json" \
         -H "X-API-Key: ${DEPENDENCYTRACK_API_KEY}" \
-        -d @${CI_PROJECT_DIR}/tmp/dt-sbom-composer.cdx.json
+        -d @${CI_PROJECT_DIR}/report-bom.json
   artifacts:
     paths:
-      - tmp/gl-sbom-composer.cdx.json
-      - tmp/gl-sbom-composer.cdx.xml
-      - tmp/dt-sbom-composer.cdx.json
-    reports:
-      cyclonedx:
-        - tmp/gl-sbom-composer.cdx.json
+      - composer-sbom.cdx.xml
+      - report-bom.json
   allow_failure: true
 
 renovate:
