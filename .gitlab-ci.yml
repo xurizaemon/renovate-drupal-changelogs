@@ -381,6 +381,7 @@ renovate:
   script:
     - renovate $RENOVATE_EXTRA_FLAGS
   rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
     - if: '$CI_PIPELINE_SOURCE == "schedule"'
     - if: '$CI_PIPELINE_SOURCE == "web"'
       when: manual
