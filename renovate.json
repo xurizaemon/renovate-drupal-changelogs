@@ -47,24 +47,36 @@
       ],
       "prPriority": 20,
       "excludePackageNames": [
-        "drupal/core-composer-scaffold",
-        "drupal/core-dev",
-        "drupal/core-dev-pinned",
-        "drupal/core-project-message",
-        "drupal/core-recommended",
-        "drupal/core-utility",
-        "drupal/core-vendor-hardening",
+        "drupal/core-.*",
         "drupal/drupal"
       ],
-      "groupName": "Minor and patch - Contrib",
+      "groupName": "Minor and patch - Drupal contrib",
       "groupSlug": "minor-patch-contrib",
+      "labels": [
+        "drupal-contrib"
+      ],
+      "matchPackagePatterns": [
+        "drupal/.*"
+      ],
+      "prBodyColumns": ["Package", "Change", "Compare"],
+      "separateMinorPatch": false
+    },
+    {
+      "matchDatasources": [
+        "packagist"
+      ],
+      "prPriority": 30,
+      "excludePackageNames": [
+        "drupal/.*"
+      ],
+      "groupName": "Minor and patch - Other packagist",
+      "groupSlug": "minor-patch-packagist",
       "labels": [
         "drupal-contrib"
       ],
       "matchPackagePatterns": [
         ".*"
       ],
-      "prBodyColumns": ["Package", "Change", "Compare"],
       "separateMinorPatch": false
     },
     {
@@ -73,24 +85,17 @@
         "packagist"
       ],
       "matchDepNames": [
-        "drupal/core-composer-scaffold",
-        "drupal/core-dev",
-        "drupal/core-dev-pinned",
-        "drupal/core-project-message",
-        "drupal/core-recommended",
-        "drupal/core-utility",
-        "drupal/core-vendor-hardening",
+        "drupal/core-*",
         "drupal/drupal"
       ],
       "labels": [
         "drupal-core"
       ],
       "matchUpdateTypes": [
-        "patch",
-        "minor"
+        "patch"
       ],
       "prBodyColumns": ["Package", "Change", "Compare"],
-      "prPriority": 30,
+      "prPriority": 40,
       "groupName": "Minor and patch - Drupal Core",
       "groupSlug": "minor-patch-core"
     },
@@ -102,7 +107,7 @@
         "patch",
         "minor"
       ],
-      "prPriority": 40,
+      "prPriority": 50,
       "groupName": "NPM updates",
       "groupSlug": "npm-updates",
       "paths": [
@@ -111,6 +116,7 @@
       ]
     },
     {
+      "draftPR": true,
       "matchPackagePrefixes": [
         "drupal-ckeditor-libraries-group/",
         "npm-asset/"
@@ -119,7 +125,7 @@
       "labels": [
         "drupal-library"
       ],
-      "draftPR": true
+      "prPriority": 50
     }
   ],
   "prBodyDefinitions": {
