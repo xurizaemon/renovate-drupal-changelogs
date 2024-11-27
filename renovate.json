@@ -45,11 +45,31 @@
       "matchDatasources": [
         "packagist"
       ],
-      "matchDepNames": [
+      "prPriority": 20,
+      "excludePackageNames": [
         "drupal/core-composer-scaffold",
         "drupal/core-dev",
         "drupal/core-project-message",
         "drupal/core-recommended"
+      ],
+      "groupName": "Minor and patch - Contrib",
+      "groupSlug": "minor-patch-contrib",
+      "matchPackagePatterns": [
+        ".*"
+      ],
+      "prBodyColumns": ["Package", "Change", "Compare"],
+      "separateMinorPatch": false
+    },
+    {
+      "matchDatasources": [
+        "packagist"
+      ],
+      "matchDepNames": [
+        "drupal/core-composer-scaffold",
+        "drupal/core-dev",
+        "drupal/core-project-message",
+        "drupal/core-recommended",
+        "drupal/drupal"
       ],
       "matchUpdateTypes": [
         "patch",
@@ -64,31 +84,13 @@
     },
     {
       "matchDatasources": [
-        "packagist"
-      ],
-      "prPriority": 20,
-      "excludePackageNames": [
-        "drupal/core-composer-scaffold",
-        "drupal/core-dev",
-        "drupal/core-project-message",
-        "drupal/core-recommended"
-      ],
-      "groupName": "Minor and patch - Contrib",
-      "groupSlug": "minor-patch-contrib",
-      "matchPackagePatterns": [
-        ".*"
-      ],
-      "separateMinorPatch": false
-    },
-    {
-      "matchDatasources": [
         "npm"
       ],
       "matchUpdateTypes": [
         "patch",
         "minor"
       ],
-      "prPriority": 30,
+      "prPriority": 40,
       "groupName": "NPM updates",
       "groupSlug": "npm-updates",
       "paths": [
@@ -100,6 +102,9 @@
       ]
     }
   ],
+  "prBodyDefinitions": {
+    "Compare": "[Compare](https://git.drupalcode.org/project/{{replace '.git' '' sourceRepoName}}/-/compare/{{currentVersion}}...{{newVersion}})"
+  },
   "prConcurrentLimit": 1,
   "rangeStrategy": "bump",
   "rebaseWhen": "auto",
