@@ -53,6 +53,7 @@
       "groupName": "Minor and patch - Drupal contrib",
       "groupSlug": "minor-patch-contrib",
       "labels": [
+        "dependencies",
         "drupal-contrib"
       ],
       "matchPackagePatterns": [
@@ -72,7 +73,8 @@
       "groupName": "Minor and patch - Other packagist",
       "groupSlug": "minor-patch-packagist",
       "labels": [
-        "drupal-contrib"
+        "dependencies",
+        "packagist"
       ],
       "matchPackagePatterns": [
         ".*"
@@ -89,6 +91,7 @@
         "drupal/drupal"
       ],
       "labels": [
+        "dependencies",
         "drupal-core"
       ],
       "matchUpdateTypes": [
