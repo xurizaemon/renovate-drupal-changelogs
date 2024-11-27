@@ -10,6 +10,10 @@
     "main"
   ],
   "branchPrefix": "deps/",
+  "enabledManagers": [
+    "composer",
+    "npm",
+  ],
   "extends": [
     "config:recommended",
     "group:symfony"
@@ -41,40 +45,54 @@
       "matchDatasources": [
         "packagist"
       ],
+      "prPriority": 20,
+      "excludePackageNames": [
+        "drupal/core-composer-scaffold",
+        "drupal/core-dev",
+        "drupal/core-dev-pinned",
+        "drupal/core-project-message",
+        "drupal/core-recommended",
+        "drupal/core-utility",
+        "drupal/core-vendor-hardening",
+        "drupal/drupal"
+      ],
+      "groupName": "Minor and patch - Contrib",
+      "groupSlug": "minor-patch-contrib",
+      "labels": [
+        "drupal-contrib"
+      ],
+      "matchPackagePatterns": [
+        ".*"
+      ],
+      "prBodyColumns": ["Package", "Change", "Compare"],
+      "separateMinorPatch": false
+    },
+    {
+      "draftPR": true,
+      "matchDatasources": [
+        "packagist"
+      ],
       "matchDepNames": [
         "drupal/core-composer-scaffold",
         "drupal/core-dev",
+        "drupal/core-dev-pinned",
         "drupal/core-project-message",
-        "drupal/core-recommended"
+        "drupal/core-recommended",
+        "drupal/core-utility",
+        "drupal/core-vendor-hardening",
+        "drupal/drupal"
+      ],
+      "labels": [
+        "drupal-core"
       ],
       "matchUpdateTypes": [
         "patch",
         "minor"
       ],
+      "prBodyColumns": ["Package", "Change", "Compare"],
       "prPriority": 30,
       "groupName": "Minor and patch - Drupal Core",
-      "groupSlug": "minor-patch-core",
-      "schedule": [
-        "before 2am"
-      ]
-    },
-    {
-      "matchDatasources": [
-        "packagist"
-      ],
-      "prPriority": 20,
-      "excludePackageNames": [
-        "drupal/core-composer-scaffold",
-        "drupal/core-dev",
-        "drupal/core-project-message",
-        "drupal/core-recommended"
-      ],
-      "groupName": "Minor and patch - Contrib",
-      "groupSlug": "minor-patch-contrib",
-      "matchPackagePatterns": [
-        ".*"
-      ],
-      "separateMinorPatch": false
+      "groupSlug": "minor-patch-core"
     },
     {
       "matchDatasources": [
@@ -84,19 +102,30 @@
         "patch",
         "minor"
       ],
-      "prPriority": 30,
+      "prPriority": 40,
       "groupName": "NPM updates",
       "groupSlug": "npm-updates",
       "paths": [
         "web/modules/custom/*/package.json",
         "web/themes/custom/*/package.json"
-      ],
-      "schedule": [
-        "before 2am"
       ]
+    },
+    {
+      "matchPackagePrefixes": [
+        "drupal-ckeditor-libraries-group/",
+        "npm-asset/"
+      ],
+      "groupName": "Drupal libraries & plugins",
+      "labels": [
+        "drupal-library"
+      ],
+      "draftPR": true
     }
   ],
-  "prConcurrentLimit": 1,
+  "prBodyDefinitions": {
+    "Compare": "[Compare](https://git.drupalcode.org/project/{{replace '.git' '' sourceRepoName}}/-/compare/{{currentVersion}}...{{newVersion}})"
+  },
+  "prConcurrentLimit": 2,
   "rangeStrategy": "bump",
   "rebaseWhen": "auto",
   "timezone": "Pacific/Auckland",
