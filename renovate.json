@@ -49,11 +49,18 @@
       "excludePackageNames": [
         "drupal/core-composer-scaffold",
         "drupal/core-dev",
+        "drupal/core-dev-pinned",
         "drupal/core-project-message",
-        "drupal/core-recommended"
+        "drupal/core-recommended",
+        "drupal/core-utility",
+        "drupal/core-vendor-hardening",
+        "drupal/drupal"
       ],
       "groupName": "Minor and patch - Contrib",
       "groupSlug": "minor-patch-contrib",
+      "labels": [
+        "drupal-contrib"
+      ],
       "matchPackagePatterns": [
         ".*"
       ],
@@ -61,26 +68,31 @@
       "separateMinorPatch": false
     },
     {
+      "draftPR": true,
       "matchDatasources": [
         "packagist"
       ],
       "matchDepNames": [
         "drupal/core-composer-scaffold",
         "drupal/core-dev",
+        "drupal/core-dev-pinned",
         "drupal/core-project-message",
         "drupal/core-recommended",
+        "drupal/core-utility",
+        "drupal/core-vendor-hardening",
         "drupal/drupal"
+      ],
+      "labels": [
+        "drupal-core"
       ],
       "matchUpdateTypes": [
         "patch",
         "minor"
       ],
+      "prBodyColumns": ["Package", "Change", "Compare"],
       "prPriority": 30,
       "groupName": "Minor and patch - Drupal Core",
-      "groupSlug": "minor-patch-core",
-      "schedule": [
-        "before 2am"
-      ]
+      "groupSlug": "minor-patch-core"
     },
     {
       "matchDatasources": [
@@ -96,10 +108,18 @@
       "paths": [
         "web/modules/custom/*/package.json",
         "web/themes/custom/*/package.json"
-      ],
-      "schedule": [
-        "before 2am"
       ]
+    },
+    {
+      "matchPackagePrefixes": [
+        "drupal-ckeditor-libraries-group/",
+        "npm-asset/"
+      ],
+      "groupName": "Drupal libraries & plugins",
+      "labels": [
+        "drupal-library"
+      ],
+      "draftPR": true
     }
   ],
   "prBodyDefinitions": {
