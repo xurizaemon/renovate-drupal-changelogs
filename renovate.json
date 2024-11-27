@@ -10,6 +10,10 @@
     "main"
   ],
   "branchPrefix": "deps/",
+  "enabledManagers": [
+    "composer",
+    "npm",
+  ],
   "extends": [
     "config:recommended",
     "group:symfony"
