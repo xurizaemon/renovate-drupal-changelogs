@@ -125,7 +125,7 @@
   "prBodyDefinitions": {
     "Compare": "[Compare](https://git.drupalcode.org/project/{{replace '.git' '' sourceRepoName}}/-/compare/{{currentVersion}}...{{newVersion}})"
   },
-  "prConcurrentLimit": 1,
+  "prConcurrentLimit": 2,
   "rangeStrategy": "bump",
   "rebaseWhen": "auto",
   "timezone": "Pacific/Auckland",
