@@ -281,7 +281,7 @@ cypress:
     reports:
       junit: tests/cypress/results/*.xml
 
-pa11y:
+.pa11y:
   cache:
     key: ${CI_COMMIT_REF_SLUG}
     paths:
