@@ -28,6 +28,33 @@ workflow:
   cache:
     policy: pull
 
+.notify matrix:
+  stage: .post
+  allow_failure: true
+  image:
+    name: matrixcommander/matrix-commander
+    entrypoint: ["/bin/bash", "-l", "-c"]
+  before_script:
+  before_script:
+    # Verify that the required variables have been configured in Gitlab CI/CD Variables before proceeding.
+    - >
+      if [ -z "${MATRIX_USERNAME}" -o -z "${MATRIX_PASSWORD}" -o -z "${MATRIX_HOMESERVER}" -o -z "${MATRIX_ROOM}" ]; then
+        echo "Configure MATRIX_USERNAME, MATRIX_PASSWORD, MATRIX_HOMESERVER and MATRIX_ROOM to send Matrix notifications."
+        exit 1
+      fi
+    - export PATH=$PATH:/app/matrix_commander
+    - matrix-commander --version
+  script:
+    - |+
+      matrix-commander --login password \
+        --user-login "${MATRIX_USERNAME}" \
+        --password "${MATRIX_PASSWORD}" \
+        --homeserver "${MATRIX_HOMESERVER}" \
+        --room-default "${MATRIX_ROOM}" \
+        --log-level ERROR ERROR \
+        --device "ci" \
+        -m "${NOTIFICATION_MESSAGE}"
+
 composer install:
   extends: .cache_strategy_push
   stage: build
@@ -410,3 +437,17 @@ composer changes:
     - composer global require davidrjonas/composer-lock-diff:^1.0
     - composer-lock-diff --from origin/$CI_MERGE_REQUEST_TARGET_BRANCH_NAME --md | tee composer-changes.txt
 
+success notification:
+  extends: .notify matrix
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+  variables:
+    NOTIFICATION_MESSAGE: "🍐 ${CI_PROJECT_NAMESPACE}/${CI_PROJECT_NAME}!${CI_MERGE_REQUEST_IID} pipeline passed\n- ${CI_MERGE_REQUEST_PROJECT_URL}/-/merge_requests/${CI_MERGE_REQUEST_IID} - ${CI_PIPELINE_URL}"
+
+failure notification:
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+      when: on_failure
+  extends: .notify matrix
+  variables:
+    NOTIFICATION_MESSAGE: "😐 ${CI_PROJECT_NAMESPACE}/${CI_PROJECT_NAME}!${CI_MERGE_REQUEST_IID} pipeline failed\n- ${CI_MERGE_REQUEST_PROJECT_URL}/-/merge_requests/${CI_MERGE_REQUEST_IID} - ${CI_PIPELINE_URL}"
