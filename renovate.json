@@ -1,36 +1,24 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": [
-    "config:base",
-    "group:symfony"
-  ],
+  "extends": ["config:recommended", "group:symfony"],
   "branchPrefix": "deps/",
   "labels": ["dependencies"],
-  "assignees": [
-    "xurizaemon"
-  ],
+  "assignees": ["xurizaemon"],
   "timezone": "Pacific/Auckland",
-  "automergeSchedule": [
-    "every weekend"
-  ],
+  "automergeSchedule": ["every weekend"],
   "rebaseWhen": "auto",
-  "baseBranches": [
-    "main"
-  ],
+  "baseBranches": ["main"],
   "prConcurrentLimit": 1,
   "rangeStrategy": "bump",
   "automerge": false,
   "packageRules": [
-    {
-      "matchDepNames": ["php"],
-      "enabled": false
-    },
+    {"matchDepNames": ["php"], "enabled": false},
     {
       "groupName": "Major all - skipped to update manually",
       "matchDatasources": ["packagist"],
       "matchUpdateTypes": ["major"],
-      "matchPackagePatterns": [".*"],
-      "enabled": false
+      "enabled": false,
+      "matchPackageNames": ["/.*/"]
     },
     {
       "groupName": "Minor and patch - Drupal Core",
@@ -51,19 +39,20 @@
       "groupSlug": "minor-patch-contrib",
       "matchDatasources": ["packagist"],
       "separateMinorPatch": false,
-      "matchPackagePatterns": [".*"],
-      "excludePackageNames": [
-        "drupal/core-composer-scaffold",
-        "drupal/core-dev",
-        "drupal/core-project-message",
-        "drupal/core-recommended"
-      ],
-      "prPriority": 20
+      "prPriority": 20,
+      "matchPackageNames": [
+        "/.*/",
+        "!drupal/commerce_dps",
+        "!drupal/core-composer-scaffold",
+        "!drupal/core-dev",
+        "!drupal/core-project-message",
+        "!drupal/core-recommended"
+      ]
     },
     {
       "groupName": "Minor and patch - NPM",
       "groupSlug": "custom-theme-npm-updates",
-      "paths": ["web/themes/custom/*/package.json"],
+      "matchFileNames": ["web/themes/custom/*/package.json"],
       "schedule": ["before 2am"],
       "matchDatasources": ["npm"],
       "matchUpdateTypes": ["patch", "minor"],
