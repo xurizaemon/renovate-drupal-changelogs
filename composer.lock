@@ -3024,11 +3024,11 @@
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/commerce_dps.git",
-                "reference": "464f567dfdbd309ba825c514caec0c757a41f047"
+                "reference": "b0a136cc9136925c1395079621c9bca7e98e0fda"
             },
             "require": {
                 "drupal/commerce": "~2",
-                "league/omnipay": "~3.0",
+                "league/omnipay": "^3.0",
                 "omnipay/paymentexpress": "~3.0"
             },
             "default-branch": true,
@@ -3038,7 +3038,7 @@
             ],
             "description": "Provides Commerce integration for DPS.",
             "homepage": "http://drupal.org/project/commerce_dps",
-            "time": "2021-06-30T10:57:03+00:00"
+            "time": "2025-01-19T02:07:44+00:00"
         },
         {
             "name": "drupal/commerce_email",
