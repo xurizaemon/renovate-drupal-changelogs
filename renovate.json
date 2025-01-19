@@ -53,6 +53,7 @@
       "separateMinorPatch": false,
       "matchPackagePatterns": [".*"],
       "excludePackageNames": [
+        "drupal/commerce_dps",
         "drupal/core-composer-scaffold",
         "drupal/core-dev",
         "drupal/core-project-message",
