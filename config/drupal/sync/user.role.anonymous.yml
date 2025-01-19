@@ -1,4 +1,4 @@
-uuid: cd81183c-4e0d-40d6-a183-ffe54517dc0e
+uuid: 46db44cd-7fa5-4ee0-be68-23d42eb2b72e
 langcode: en
 status: true
 dependencies:
@@ -9,6 +9,7 @@ dependencies:
     - commerce_checkout
     - commerce_product
     - filter
+    - media
     - system
 _core:
   default_config_hash: j5zLMOdJBqC0bMvSdth5UebkprJB8g_2FXHqhfpJzow
@@ -22,3 +23,4 @@ permissions:
   - 'access content'
   - 'use text format restricted_html'
   - 'view commerce_product'
+  - 'view media'

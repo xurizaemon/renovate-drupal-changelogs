@@ -1,4 +1,4 @@
-uuid: d83242ca-b41d-440a-af78-f3ed4ee16041
+uuid: f7755793-9be6-4083-872e-aace437398ff
 langcode: en
 status: true
 dependencies:
@@ -11,6 +11,7 @@ dependencies:
     - commerce_payment
     - commerce_product
     - filter
+    - media
     - shortcut
     - system
 _core:
@@ -29,4 +30,5 @@ permissions:
   - 'skip comment approval'
   - 'use text format basic_html'
   - 'view commerce_product'
+  - 'view media'
   - 'view own commerce_order'

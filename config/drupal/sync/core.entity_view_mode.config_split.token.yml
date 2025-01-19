@@ -1,4 +1,4 @@
-uuid: 8302a61d-cc67-454c-abed-9dd983ebebf4
+uuid: a541cd3f-5090-444e-942a-c278c4188b3d
 langcode: en
 status: true
 dependencies:
@@ -6,5 +6,6 @@ dependencies:
     - config_split
 id: config_split.token
 label: Token
+description: ''
 targetEntityType: config_split
 cache: true

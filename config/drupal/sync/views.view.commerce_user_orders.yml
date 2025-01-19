@@ -1,4 +1,4 @@
-uuid: cea8d42d-40c3-4d77-aa77-fa27234f326b
+uuid: d83aea81-dd08-4958-8a4b-11cb2a4d9239
 langcode: en
 status: true
 dependencies:
@@ -70,6 +70,7 @@ display:
             offset: false
             offset_label: Offset
           quantity: 9
+          pagination_heading_level: h4
       style:
         type: table
         options:
@@ -543,7 +544,6 @@ display:
           default_argument_type: fixed
           default_argument_options:
             argument: ''
-          default_argument_skip_url: false
           summary_options:
             base_path: ''
             count: true

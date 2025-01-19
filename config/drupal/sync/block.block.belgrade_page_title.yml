@@ -1,10 +1,15 @@
-uuid: 44e60a78-ef93-44c8-9287-1cea94bd49bb
+uuid: fb84c508-6b7e-43fc-8a4a-194c51c79b7c
 langcode: en
 status: true
 dependencies:
   module:
     - system
+    - block_visibility_conditions
+    - block_visibility_conditions_node
+    - block_visibility_conditions_taxonomy
+    - system
   theme:
+    - belgrade
     - belgrade
 _core:
   default_config_hash: 4sQo3UuHbrbLZzZUf13YP_N6Fij0jcdoy89cFXkpJCU
@@ -22,6 +27,15 @@ settings:
 visibility:
   request_path:
     id: request_path
-    pages: "<front>\r\n/product/*\r\n/products*\r\n"
     negate: true
     context_mapping: {  }
+    pages: "<front>\r\n/product/*\r\n/products*\r\n"
+  not_node_type:
+    id: not_node_type
+    bundles:
+      landing_page: cklb_landing_page
+    negate: null
+  not_taxonomy_vocabulary:
+    id: not_taxonomy_vocabulary
+    bundles: {  }
+    negate: null

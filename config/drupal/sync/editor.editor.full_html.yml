@@ -1,4 +1,4 @@
-uuid: 8d9db363-fed2-48aa-a996-b609fe220ade
+uuid: 456c5e51-4baa-4597-94da-e1df18899395
 langcode: en
 status: true
 dependencies:
@@ -45,8 +45,10 @@ settings:
     ckeditor5_imageResize:
       allow_resize: true
     ckeditor5_list:
-      reversed: true
-      startIndex: true
+      properties:
+        reversed: true
+        startIndex: true
+      multiBlock: true
     ckeditor5_sourceEditing:
       allowed_tags: {  }
     ckeditor5_codeBlock:
@@ -97,7 +99,7 @@ image_upload:
   status: true
   scheme: public
   directory: inline-images
-  max_size: ''
+  max_size: null
   max_dimensions:
-    width: 0
-    height: 0
+    width: null
+    height: null

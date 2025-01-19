@@ -1,4 +1,4 @@
-uuid: d49c26db-ca5a-46e2-aed4-6ee87d2b4630
+uuid: 8367c330-fa7e-4afb-b5e9-f2f4bf0d982c
 langcode: en
 status: true
 dependencies:
@@ -72,6 +72,7 @@ display:
             first: '« first'
             last: 'last »'
           quantity: 9
+          pagination_heading_level: h4
       style:
         type: table
         options:
