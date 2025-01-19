@@ -1,4 +1,4 @@
-uuid: 5cf6561f-70b8-4521-b5e9-3d176afdcf77
+uuid: 526f5915-95a1-4125-96f5-6dc19064f0b3
 langcode: en
 status: true
 dependencies:
@@ -11,5 +11,6 @@ _core:
   default_config_hash: 23R0npqqL2T9F-gDL2Lor2GfZj_lDvmv-kwdQzPCxMw
 id: commerce_product_variation.summary
 label: Summary
+description: ''
 targetEntityType: commerce_product_variation
 cache: true

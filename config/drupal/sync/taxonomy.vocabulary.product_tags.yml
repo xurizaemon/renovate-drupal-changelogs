@@ -1,0 +1,11 @@
+uuid: a85b6720-f855-489e-bc5b-d4cade3ebead
+langcode: en
+status: true
+dependencies: {  }
+_core:
+  default_config_hash: _YWBbpbv_BMlItGasaNQ1wKOUtV1F6RhGKL5Ag5wLfc
+name: 'Product Tags'
+vid: product_tags
+description: 'Tags are searchable keywords that you can associate with your product.'
+weight: 0
+new_revision: false

@@ -1,4 +1,4 @@
-uuid: 4d6e0e82-2f9f-408d-9e82-1d69b2f4b33c
+uuid: 56aa127f-44dc-4338-9e9c-584d0898e826
 langcode: en
 status: true
 dependencies:
@@ -6,7 +6,7 @@ dependencies:
     - block_content
     - user
 _core:
-  default_config_hash: AcOE_1RLjX4okjWSOk7Pen1IdtPsY0Nbn0HXWG3zMqc
+  default_config_hash: HfvTcWhiVuvxchoh4DjIkXhKkj9ow2TGgHkLHSvRLq8
 id: block_content
 label: 'Content blocks'
 module: views
@@ -273,6 +273,7 @@ display:
         type: mini
         options:
           offset: 0
+          pagination_heading_level: h4
           items_per_page: 50
           total_pages: null
           id: 0

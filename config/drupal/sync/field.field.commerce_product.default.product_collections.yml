@@ -1,0 +1,31 @@
+uuid: e5251e16-682b-460d-bd36-4068b5dad308
+langcode: en
+status: true
+dependencies:
+  config:
+    - commerce_product.commerce_product_type.default
+    - field.storage.commerce_product.product_collections
+    - taxonomy.vocabulary.product_collections
+_core:
+  default_config_hash: NTLAO9j_f2tovaBc6AtpKV7LscJ6tlHnerrpmnTonuQ
+id: commerce_product.default.product_collections
+field_name: product_collections
+entity_type: commerce_product
+bundle: default
+label: 'Product Collections'
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      product_collections: product_collections
+    sort:
+      field: name
+      direction: asc
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

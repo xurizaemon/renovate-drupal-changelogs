@@ -1,4 +1,4 @@
-uuid: 73501e97-65b4-4114-9e2b-c8d3d1938976
+uuid: 5a8ce24c-9f10-4c15-a505-639efdf55948
 langcode: en
 status: true
 dependencies:
@@ -11,5 +11,6 @@ _core:
   default_config_hash: yeGwCxbA5dBAS_3eBkfaVrbxkASEM357dkjPZShKiR4
 id: profile.billing
 label: Billing
+description: ''
 targetEntityType: profile
 cache: true

@@ -1,0 +1,23 @@
+uuid: b82f11a5-f856-4261-866b-aa1f20b67c3a
+langcode: en
+status: true
+dependencies:
+  config:
+    - commerce_product.commerce_product_type.default
+    - field.storage.commerce_product.layout_builder__layout
+  module:
+    - layout_builder
+_core:
+  default_config_hash: iuDu06ssJ2sEZVFp1YF65BKvJ7sSn-uTZisC0RoOKJM
+id: commerce_product.default.layout_builder__layout
+field_name: layout_builder__layout
+entity_type: commerce_product
+bundle: default
+label: Layout
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: layout_section

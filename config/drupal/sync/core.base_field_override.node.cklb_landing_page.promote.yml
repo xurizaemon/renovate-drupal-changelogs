@@ -1,0 +1,24 @@
+uuid: 10f8bb96-fcea-4218-902a-694b6efc1c36
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.cklb_landing_page
+_core:
+  default_config_hash: 6EocT_vlGJAAmXC0eJwk-KOK1ZJTfKTuLKqc-jW5Y1Y
+id: node.cklb_landing_page.promote
+field_name: promote
+entity_type: node
+bundle: cklb_landing_page
+label: 'Promoted to front page'
+description: ''
+required: false
+translatable: true
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean

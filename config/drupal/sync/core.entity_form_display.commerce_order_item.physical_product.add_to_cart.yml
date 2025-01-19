@@ -1,0 +1,39 @@
+uuid: 36be977f-636b-45a2-9492-b9cfa7e34ef1
+langcode: en
+status: true
+dependencies:
+  config:
+    - commerce_order.commerce_order_item_type.physical_product
+    - core.entity_form_mode.commerce_order_item.add_to_cart
+  module:
+    - commerce_order
+    - commerce_product
+_core:
+  default_config_hash: XtI7u6hRu5u2VOpcZ6X0RrUYimB5I3A7NCzaton3oVw
+id: commerce_order_item.physical_product.add_to_cart
+targetEntityType: commerce_order_item
+bundle: physical_product
+mode: add_to_cart
+content:
+  purchased_entity:
+    type: commerce_product_variation_title
+    weight: 0
+    region: content
+    settings:
+      label_display: true
+      label_text: 'Please select'
+      hide_single: true
+    third_party_settings: {  }
+  quantity:
+    type: commerce_quantity
+    weight: 1
+    region: content
+    settings:
+      placeholder: ''
+      step: '1'
+    third_party_settings: {  }
+hidden:
+  adjustments: true
+  created: true
+  total_price: true
+  unit_price: true

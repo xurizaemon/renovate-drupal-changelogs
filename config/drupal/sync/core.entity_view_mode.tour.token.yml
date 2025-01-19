@@ -1,4 +1,4 @@
-uuid: 5ad69229-2cd5-4f03-b490-0097b47863a6
+uuid: 02c75d19-68f4-4da8-9e91-a2cccb31bd85
 langcode: en
 status: true
 dependencies:
@@ -6,5 +6,6 @@ dependencies:
     - tour
 id: tour.token
 label: Token
+description: ''
 targetEntityType: tour
 cache: true

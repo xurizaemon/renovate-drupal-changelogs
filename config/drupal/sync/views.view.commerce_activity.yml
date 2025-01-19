@@ -1,4 +1,4 @@
-uuid: b2ee1e07-1485-4da6-b069-22bfe072075e
+uuid: 130154bb-eadf-40b6-9069-9671e37356ad
 langcode: en
 status: true
 dependencies:
@@ -342,7 +342,6 @@ display:
           default_argument_type: fixed
           default_argument_options:
             argument: ''
-          default_argument_skip_url: false
           summary_options:
             base_path: ''
             count: true
@@ -379,7 +378,6 @@ display:
           default_argument_type: fixed
           default_argument_options:
             argument: ''
-          default_argument_skip_url: false
           summary_options:
             base_path: ''
             count: true

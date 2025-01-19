@@ -1,14 +1,15 @@
 _core:
-  default_config_hash: l58O_yEXSo-SeJi19LXdzTU1tNJG3lmnIhCitRkM1tk
+  default_config_hash: HlN7eAN2N4JIHsYv56V4E7sqC9bS609KwvGFjyD_mgk
 langcode: en
-uuid: 6df834be-fe24-48ca-96ec-058297b5e7f9
+uuid: cce0d4c4-be79-4790-8ae2-0b0c00fa382e
 name: 'Commerce Demo'
 mail: admin@example.com
 slogan: ''
 page:
   403: ''
   404: ''
-  front: /node
+  front: /frontpage
 admin_compact_mode: false
 weight_select_max: 100
 default_langcode: en
+mail_notification: null

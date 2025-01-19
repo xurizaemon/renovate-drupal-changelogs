@@ -1,4 +1,4 @@
-uuid: a2601134-fb71-44a7-a3b7-2e97d1dfb013
+uuid: 45c3af70-523a-4e01-9035-809808eb4919
 langcode: en
 status: true
 dependencies:
@@ -6,7 +6,7 @@ dependencies:
     - comment
     - user
 _core:
-  default_config_hash: WFURZFZFHS9S7tEJJqOd6ucYexi84JiyQxE5suLP7D8
+  default_config_hash: H6JHGXl97yOKmVaV62SoY1ki1tWVdyD44fgOkdmVyRM
 id: comment
 label: Comments
 module: comment
@@ -533,6 +533,7 @@ display:
         type: full
         options:
           offset: 0
+          pagination_heading_level: h4
           items_per_page: 50
           total_pages: null
           id: 0

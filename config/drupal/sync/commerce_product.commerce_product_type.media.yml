@@ -1,0 +1,17 @@
+uuid: bd1feb50-15f3-4c8c-924d-9c9f9a77fc35
+langcode: en
+status: true
+dependencies: {  }
+_core:
+  default_config_hash: 4gHaqI02CxQt5YJ-wOpHdEcdPsf-bOLmwQ4H-hyFYpQ
+id: media
+label: Media
+description: ''
+variationType: media_license_download
+variationTypes:
+  - media_license_download
+  - media_physical
+multipleVariations: true
+injectVariationFields: true
+traits: {  }
+locked: false
