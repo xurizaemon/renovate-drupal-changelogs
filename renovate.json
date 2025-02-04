@@ -1,31 +1,60 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": ["config:recommended", "group:symfony"],
+  "extends": [
+    "config:recommended",
+    "group:symfony"
+  ],
   "branchPrefix": "deps/",
-  "labels": ["dependencies"],
-  "assignees": ["xurizaemon"],
+  "labels": [
+    "dependencies"
+  ],
+  "assignees": [
+    "xurizaemon"
+  ],
   "timezone": "Pacific/Auckland",
-  "automergeSchedule": ["every weekend"],
+  "automergeSchedule": [
+    "every weekend"
+  ],
   "rebaseWhen": "auto",
-  "baseBranches": ["main"],
+  "baseBranches": [
+    "main"
+  ],
   "prConcurrentLimit": 1,
   "rangeStrategy": "bump",
   "automerge": false,
   "packageRules": [
-    {"matchDepNames": ["php"], "enabled": false},
+    {
+      "matchDepNames": [
+        "php"
+      ],
+      "enabled": false
+    },
     {
       "groupName": "Major all - skipped to update manually",
-      "matchDatasources": ["packagist"],
-      "matchUpdateTypes": ["major"],
+      "matchDatasources": [
+        "packagist"
+      ],
+      "matchUpdateTypes": [
+        "major"
+      ],
       "enabled": false,
-      "matchPackageNames": ["/.*/"]
+      "matchPackageNames": [
+        "/.*/"
+      ]
     },
     {
       "groupName": "Minor and patch - Drupal Core",
       "groupSlug": "minor-patch-core",
-      "schedule": ["before 2am"],
-      "matchDatasources": ["packagist"],
-      "matchUpdateTypes": ["patch", "minor"],
+      "schedule": [
+        "before 2am"
+      ],
+      "matchDatasources": [
+        "packagist"
+      ],
+      "matchUpdateTypes": [
+        "patch",
+        "minor"
+      ],
       "matchDepNames": [
         "drupal/core-composer-scaffold",
         "drupal/core-dev",
@@ -37,7 +66,9 @@
     {
       "groupName": "Minor and patch - Contrib",
       "groupSlug": "minor-patch-contrib",
-      "matchDatasources": ["packagist"],
+      "matchDatasources": [
+        "packagist"
+      ],
       "separateMinorPatch": false,
       "prPriority": 20,
       "matchPackageNames": [
@@ -52,10 +83,19 @@
     {
       "groupName": "Minor and patch - NPM",
       "groupSlug": "custom-theme-npm-updates",
-      "matchFileNames": ["web/themes/custom/*/package.json"],
-      "schedule": ["before 2am"],
-      "matchDatasources": ["npm"],
-      "matchUpdateTypes": ["patch", "minor"],
+      "matchFileNames": [
+        "web/themes/custom/*/package.json"
+      ],
+      "schedule": [
+        "before 2am"
+      ],
+      "matchDatasources": [
+        "npm"
+      ],
+      "matchUpdateTypes": [
+        "patch",
+        "minor"
+      ],
       "prPriority": 30
     }
   ]
