@@ -205,7 +205,7 @@ behat:
   services:
     - name: mailhog/mailhog
       alias: mailhog
-    - name: mysql:8
+    - name: mysql:9
       alias: db
   before_script:
     - export PATH="${CI_PROJECT_DIR}/vendor/bin:$PATH"
