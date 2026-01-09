@@ -406,8 +406,9 @@ renovate:
   extends: .renovate
   stage: build
   variables:
-    RENOVATE_REPOSITORIES: ${CI_PROJECT_PATH}
     RENOVATE_GIT_AUTHOR: Renovate Bot <renovate@grdev.co.nz>
+    RENOVATE_REPOSITORIES: ${CI_PROJECT_PATH}
+    RENOVATE_TOKEN: ${GITLAB_ACCESS_TOKEN}
   script:
     - renovate $RENOVATE_EXTRA_FLAGS
   rules:
