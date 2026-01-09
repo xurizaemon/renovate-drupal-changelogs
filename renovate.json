@@ -50,10 +50,7 @@
       ],
       "prPriority": 30,
       "groupName": "Minor and patch - Drupal Core",
-      "groupSlug": "minor-patch-core",
-      "schedule": [
-        "before 2am"
-      ]
+      "groupSlug": "minor-patch-core"
     },
     {
       "matchDatasources": [
@@ -85,18 +82,11 @@
       ],
       "prPriority": 30,
       "groupName": "Minor and patch - NPM",
-      "groupSlug": "custom-theme-npm-updates",
-      "schedule": [
-        "before 2am"
-      ]
+      "groupSlug": "custom-theme-npm-updates"
     }
   ],
   "prConcurrentLimit": 1,
-  "rangeStrategy": "bump",
   "rebaseWhen": "auto",
   "timezone": "Pacific/Auckland",
-  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "baseBranches": [
-    "main"
-  ]
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json"
 }
