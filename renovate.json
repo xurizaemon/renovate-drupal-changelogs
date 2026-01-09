@@ -7,6 +7,9 @@
     "every weekend"
   ],
   "branchPrefix": "deps/",
+  "constraints": {
+    "php": "^8.2"
+  },
   "extends": [
     "config:recommended",
     "group:symfony"
