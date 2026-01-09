@@ -1,59 +1,45 @@
 {
-  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "assignees": [
+    "xurizaemon"
+  ],
+  "automerge": false,
+  "automergeSchedule": [
+    "every weekend"
+  ],
+  "branchPrefix": "deps/",
+  "constraints": {
+    "php": "^8.2"
+  },
   "extends": [
     "config:recommended",
     "group:symfony"
   ],
-  "branchPrefix": "deps/",
   "labels": [
     "dependencies"
   ],
-  "assignees": [
-    "xurizaemon"
-  ],
-  "timezone": "Pacific/Auckland",
-  "automergeSchedule": [
-    "every weekend"
-  ],
-  "rebaseWhen": "auto",
-  "baseBranches": [
-    "main"
-  ],
-  "prConcurrentLimit": 1,
-  "rangeStrategy": "bump",
-  "automerge": false,
   "packageRules": [
     {
+      "enabled": false,
       "matchDepNames": [
         "php"
-      ],
-      "enabled": false
+      ]
     },
     {
-      "groupName": "Major all - skipped to update manually",
+      "enabled": false,
       "matchDatasources": [
         "packagist"
+      ],
+      "matchPackageNames": [
+        "/.*/"
       ],
       "matchUpdateTypes": [
         "major"
       ],
-      "enabled": false,
-      "matchPackageNames": [
-        "/.*/"
-      ]
+      "groupName": "Major all - skipped to update manually"
     },
     {
-      "groupName": "Minor and patch - Drupal Core",
-      "groupSlug": "minor-patch-core",
-      "schedule": [
-        "before 2am"
-      ],
       "matchDatasources": [
         "packagist"
-      ],
-      "matchUpdateTypes": [
-        "patch",
-        "minor"
       ],
       "matchDepNames": [
         "drupal/core-composer-scaffold",
@@ -61,16 +47,18 @@
         "drupal/core-project-message",
         "drupal/core-recommended"
       ],
-      "prPriority": 30
+      "matchUpdateTypes": [
+        "patch",
+        "minor"
+      ],
+      "prPriority": 30,
+      "groupName": "Minor and patch - Drupal Core",
+      "groupSlug": "minor-patch-core"
     },
     {
-      "groupName": "Minor and patch - Contrib",
-      "groupSlug": "minor-patch-contrib",
       "matchDatasources": [
         "packagist"
       ],
-      "separateMinorPatch": false,
-      "prPriority": 20,
       "matchPackageNames": [
         "/.*/",
         "!drupal/commerce_dps",
@@ -78,25 +66,30 @@
         "!drupal/core-dev",
         "!drupal/core-project-message",
         "!drupal/core-recommended"
-      ]
+      ],
+      "prPriority": 20,
+      "groupName": "Minor and patch - Contrib",
+      "groupSlug": "minor-patch-contrib",
+      "separateMinorPatch": false
     },
     {
-      "groupName": "Minor and patch - NPM",
-      "groupSlug": "custom-theme-npm-updates",
-      "matchFileNames": [
-        "web/themes/custom/*/package.json"
-      ],
-      "schedule": [
-        "before 2am"
-      ],
       "matchDatasources": [
         "npm"
+      ],
+      "matchFileNames": [
+        "web/themes/custom/*/package.json"
       ],
       "matchUpdateTypes": [
         "patch",
         "minor"
       ],
-      "prPriority": 30
+      "prPriority": 30,
+      "groupName": "Minor and patch - NPM",
+      "groupSlug": "custom-theme-npm-updates"
     }
-  ]
+  ],
+  "prConcurrentLimit": 1,
+  "rebaseWhen": "auto",
+  "timezone": "Pacific/Auckland",
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json"
 }
