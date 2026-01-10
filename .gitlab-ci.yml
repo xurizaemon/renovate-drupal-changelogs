@@ -97,6 +97,7 @@ drupal install:
     - cp config/settings.local.php web/sites/default/
     - ./vendor/bin/drush site-install commerce_kickstart --site-name='Commerce Demo' --no-interaction --db-url=sqlite://sites/default/files/db.sqlite
     - chmod -R ugo+rw web/sites/default/files
+    - ./vendor/bin/drush -y cache:rebuild
     - ./vendor/bin/drush -y pm:enable commerce_dps commerce_demo
     - ./vendor/bin/drush -y config:import --partial --source=../config/drupal/splits/ci
     - ./vendor/bin/drush -y config:import --partial --source=../config/drupal/splits/commerce_dps
