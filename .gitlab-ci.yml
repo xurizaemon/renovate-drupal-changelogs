@@ -137,6 +137,7 @@ behat:
       ]
   stage: test
   needs:
+    - composer install
     - drupal install
   variables:
     BEHAT_TAGS: "~@skipped"
@@ -251,6 +252,7 @@ cypress:
       - tests/cypress/build
   stage: test
   needs:
+    - composer install
     - drupal install
   variables:
     CYPRESS_drushCommand: drush
