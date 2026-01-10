@@ -10,7 +10,7 @@ events:
     - appserver: echo "Run 'lando site-install' to install a site at ${DRUSH_OPTIONS_URI} then 'lando behat' to run Behat tests."
 services:
   appserver:
-    type: php:8.2
+    type: php:8.4
     composer_version: 2-latest
     webroot: web
     config:

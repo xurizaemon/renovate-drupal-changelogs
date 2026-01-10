@@ -2,7 +2,7 @@ include:
   - project: 'renovate-bot/renovate-runner'
     file: '/templates/renovate.gitlab-ci.yml'
 
-image: devwithlando/php:8.2-apache-4
+image: devwithlando/php:8.4-apache-4
 
 stages:
   - build
@@ -303,7 +303,7 @@ cypress:
     PA11Y_THRESHOLD: 100
   services:
     # Entrypoint configuration from https://gitlab.com/gitlab-org/gitlab-runner/-/issues/3210#note_380999884
-    - name: devwithlando/php:8.2-apache-4
+    - name: devwithlando/php:8.4-apache-4
       alias: www
       entrypoint:
         - '/bin/bash'

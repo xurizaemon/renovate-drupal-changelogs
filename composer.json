@@ -14,7 +14,7 @@
         }
     ],
     "require": {
-        "php": ">=8.2 <8.3",
+        "php": ">=8.4 <8.5",
         "ext-curl": "*",
         "centarro/certified-projects": "^1.0.4",
         "centarro/commerce_kickstart": "^3.0",
@@ -106,7 +106,7 @@
             "tbachert/spi": false
         },
         "platform": {
-            "php": "8.2"
+            "php": "8.4"
         },
         "sort-packages": true
     },
