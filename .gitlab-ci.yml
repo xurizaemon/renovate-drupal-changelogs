@@ -39,7 +39,6 @@ workflow:
     name: matrixcommander/matrix-commander
     entrypoint: ["/bin/bash", "-l", "-c"]
   before_script:
-  before_script:
     # Verify that the required variables have been configured in Gitlab CI/CD Variables before proceeding.
     - >
       if [ -z "${MATRIX_USERNAME}" -o -z "${MATRIX_PASSWORD}" -o -z "${MATRIX_HOMESERVER}" -o -z "${MATRIX_ROOM}" ]; then
