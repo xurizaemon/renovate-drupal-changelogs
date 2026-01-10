@@ -94,8 +94,11 @@ drupal install:
   script:
     - mkdir -p tmp
     - php -i > tmp/php-info.txt
+    - apt update -y
+    - apt install -y sqlite3-tools
     - cp config/settings.local.php web/sites/default/
     - ./vendor/bin/drush site-install commerce_kickstart --site-name='Commerce Demo' --no-interaction --db-url=sqlite://sites/default/files/db.sqlite
+    - ls -lAF sites/default/files/db.sqlite
     - chmod -R ugo+rw web/sites/default/files
     - ./vendor/bin/drush -y cache:rebuild
     - ./vendor/bin/drush -y pm:enable commerce_dps commerce_demo
