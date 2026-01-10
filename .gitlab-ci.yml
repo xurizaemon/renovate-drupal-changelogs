@@ -7,8 +7,8 @@ image: devwithlando/php:8.4-apache-4
 stages:
   - build
   - lint
-  - test
   - check
+  - test
 
 workflow:
   rules:
