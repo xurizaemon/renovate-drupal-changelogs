@@ -16,6 +16,10 @@ workflow:
     - if: '$CI_PIPELINE_SOURCE == "schedule"'
     - if: '$CI_PIPELINE_SOURCE == "web"'
 
+variables:
+  # https://github.com/box-project/box/issues/1578
+  BOX_REQUIREMENT_CHECKER: 0
+
 .cache_strategy_push:
   cache:
     key: ${CI_COMMIT_SHA}

@@ -1,9 +1,6 @@
 grumphp:
   git_hook_variables:
-    VAGRANT_HOST_DIR: .
-    VAGRANT_PROJECT_DIR: /vagrant
     EXEC_GRUMPHP_COMMAND: exec
-    # All defined tasks would run by default.
   tasks:
     composer:
       file: ./composer.json
@@ -40,4 +37,3 @@ grumphp:
       tasks:
         - composer
         - phpcs
-        # - securitychecker
