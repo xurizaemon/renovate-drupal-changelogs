@@ -91,6 +91,8 @@ lint drupal:
 drupal install:
   extends: .cache_strategy_pull
   stage: build
+  variables:
+    DRUPAL_SQLITE_DATABASE: "web/sites/default/db.sqlite"
   needs:
     - composer install
   script:
@@ -99,8 +101,10 @@ drupal install:
     - apt update -y
     - apt install -y sqlite3
     - cp config/settings.local.php web/sites/default/
-    - ./vendor/bin/drush site-install commerce_kickstart --site-name='Commerce Demo' --no-interaction --db-url=sqlite://web/sites/default/db.sqlite
-    - chmod -R ugo+rw web/sites/default/files web/sites/default/db.sqlite
+    - ./vendor/bin/drush site-install commerce_kickstart --site-name='Commerce Demo' --no-interaction --db-url="sqlite://${DRUPAL_SQLITE_DATABASE}"
+    - chmod -R ugo+rw web/sites/default/files ${DRUPAL_SQLITE_DATABASE}
+    - cat web/sites/default/settings.php
+    - cat web/sites/default/settings.local.php
     - ./vendor/bin/drush -y cache:rebuild
     - ./vendor/bin/drush -y pm:enable commerce_dps commerce_demo
     - ./vendor/bin/drush -y config:import --partial --source=../config/drupal/splits/ci
