@@ -19,11 +19,13 @@ workflow:
 variables:
   # https://github.com/box-project/box/issues/1578
   BOX_REQUIREMENT_CHECKER: 0
+  COMPOSER_CACHE_DIR: "$CI_PROJECT_DIR/.composer-cache"
 
 .cache_strategy_push:
   cache:
     key: ${CI_COMMIT_SHA}
     paths:
+      - .composer-cache
       - vendor
       - web/core
       - web/libraries
@@ -97,8 +99,8 @@ drupal install:
     - apt update -y
     - apt install -y sqlite3
     - cp config/settings.local.php web/sites/default/
-    - ./vendor/bin/drush site-install commerce_kickstart --site-name='Commerce Demo' --no-interaction --db-url=sqlite:/${CI_PROJECT_DIR}/web/sites/default/db.sqlite
-    - chmod -R ugo+rw web/sites/default/files
+    - ./vendor/bin/drush site-install commerce_kickstart --site-name='Commerce Demo' --no-interaction --db-url=sqlite://web/sites/default/db.sqlite
+    - chmod -R ugo+rw web/sites/default/files web/sites/default/db.sqlite
     - ./vendor/bin/drush -y cache:rebuild
     - ./vendor/bin/drush -y pm:enable commerce_dps commerce_demo
     - ./vendor/bin/drush -y config:import --partial --source=../config/drupal/splits/ci
