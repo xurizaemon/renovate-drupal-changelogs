@@ -1,0 +1,23 @@
+uuid: 26a594a1-e58d-4dda-8101-9f2eedd1ecab
+langcode: en
+status: true
+dependencies:
+  module:
+    - commerce_dps
+id: commerce_dps_pxpay
+label: 'Commerce DPS'
+weight: null
+plugin: dps_pxpay
+configuration:
+  display_label: PxPay
+  mode: live
+  payment_method_types:
+    - credit_card
+  collect_billing_information: true
+  px_user: ''
+  px_key: ''
+  px_ref_prefix: 'Website Order'
+  pxpay_integration_method: redirect
+  pxpay_iframe_attributes: 'width="100%" height="750" frameborder="0"'
+conditions: {  }
+conditionOperator: AND

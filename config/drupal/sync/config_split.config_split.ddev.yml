@@ -9,6 +9,7 @@ label: DDEV
 description: 'Configuration for DDEV environments.'
 weight: 0
 stackable: false
+no_patching: false
 storage: folder
 folder: ../config/splits/ddev
 module: {  }
