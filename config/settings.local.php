@@ -157,6 +157,7 @@ ini_set('memory_limit', '1024m');
 
 $settings['file_private_path'] = '../files/private';
 $settings['file_temp_path'] = '/tmp';
+$settings['hash_salt'] = 'random-salt-goes-here';
 
 /**
  * Database configuration from environment variables.
@@ -176,6 +177,17 @@ if (getenv('LANDO') === 'ON') {
   $settings['hash_salt'] = md5(getenv('LANDO_HOST_IP'));
 }
 
+// May be a hack - gitlab-ci-local seemed to overwrite settings.php after "drupal install" script complete?!
+if (getenv('DRUPAL_SQLITE_DATABASE')) {
+  $databases['default']['default'] = array (
+    'database' => getenv('DRUPAL_SQLITE_DATABASE'),
+    'prefix' => '',
+    'namespace' => 'Drupal\\sqlite\\Driver\\Database\\sqlite',
+    'driver' => 'sqlite',
+    'autoload' => 'core/modules/sqlite/src/Driver/Database/sqlite/',
+  );
+}
+
 if ($env_px_user = getenv('COMMERCE_DPS_PX_USERID')) {
   $config['commerce_payment.commerce_payment_gateway.commerce_dps_pxpay']['configuration']['px_user'] = $env_px_user;
 }
@@ -185,3 +197,5 @@ if ($env_px_key = getenv('COMMERCE_DPS_PX_KEY')) {
 if ($env_mailhog_host = getenv('MAILHOG_HOST')) {
   $config['symfony_mailer.mailer_transport.ddev_smtp']['configuration']['host'] = $env_mailhog_host;
 }
+
+ini_set('display_errors', false);

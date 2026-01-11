@@ -20,6 +20,7 @@ variables:
   # https://github.com/box-project/box/issues/1578
   BOX_REQUIREMENT_CHECKER: 0
   COMPOSER_CACHE_DIR: "$CI_PROJECT_DIR/.composer-cache"
+  DRUPAL_SQLITE_DATABASE: "${CI_PROJECT_DIR}/tmp/db.sqlite"
 
 .cache_strategy_push:
   cache:
@@ -91,8 +92,6 @@ lint drupal:
 drupal install:
   extends: .cache_strategy_pull
   stage: build
-  variables:
-    DRUPAL_SQLITE_DATABASE: "web/sites/default/db.sqlite"
   needs:
     - composer install
   script:
@@ -100,13 +99,11 @@ drupal install:
     - php -i > tmp/php-info.txt
     - apt update -y
     - apt install -y sqlite3
+    # settings.local.php provides path to sqlite DB in CI environment.
     - cp config/settings.local.php web/sites/default/
-    - ./vendor/bin/drush site-install commerce_kickstart --site-name='Commerce Demo' --no-interaction --db-url="sqlite://${DRUPAL_SQLITE_DATABASE}"
+    - ./vendor/bin/drush site-install commerce_kickstart --site-name='Commerce Demo' --no-interaction
     - chmod -R ugo+rw web/sites/default/files ${DRUPAL_SQLITE_DATABASE}
-    - cat web/sites/default/settings.php
-    - cat web/sites/default/settings.local.php
-    - ./vendor/bin/drush -y cache:rebuild
-    - ./vendor/bin/drush -y pm:enable commerce_dps commerce_demo
+    - ./vendor/bin/drush -y pm:install commerce_dps commerce_demo
     - ./vendor/bin/drush -y config:import --partial --source=../config/drupal/splits/ci
     - ./vendor/bin/drush -y config:import --partial --source=../config/drupal/splits/commerce_dps
     - ./vendor/bin/drush -y cron
@@ -162,7 +159,7 @@ behat:
     - curl -o tmp/index.html -s http://$HOST_PORT
     - cd tests/behat
   script:
-    - behat --colors --profile ci
+    - behat --colors --profile ci --tags="${BEHAT_TAGS}"
   after_script:
     - COLUMNS=240 ./vendor/bin/drush watchdog:show --count=50000 > ${CI_PROJECT_DIR}/tmp/drupal-log-messages.txt
   artifacts:
