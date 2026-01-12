@@ -177,7 +177,6 @@ if (getenv('LANDO') === 'ON') {
   $settings['hash_salt'] = md5(getenv('LANDO_HOST_IP'));
 }
 
-// May be a hack - gitlab-ci-local seemed to overwrite settings.php after "drupal install" script complete?!
 if (getenv('DRUPAL_SQLITE_DATABASE')) {
   $databases['default']['default'] = array (
     'database' => getenv('DRUPAL_SQLITE_DATABASE'),
@@ -198,4 +197,4 @@ if ($env_mailhog_host = getenv('MAILHOG_HOST')) {
   $config['symfony_mailer.mailer_transport.ddev_smtp']['configuration']['host'] = $env_mailhog_host;
 }
 
-ini_set('display_errors', false);
+error_reporting(E_ALL & ~E_NOTICE & ~E_STRICT & ~E_DEPRECATED);
