@@ -274,7 +274,7 @@ cypress:
     - apt -y update
     - apt -y install nodejs
     - mkdir -p tmp
-    - chmod 666 ${DRUPAL_SQLITE_DATABASE}
+    - chmod ugo+rw ${DRUPAL_SQLITE_DATABASE} $( dirname ${DRUPAL_SQLITE_DATABASE} )
     - php -i > tmp/php-info.txt
     - export PATH=$PATH:${CI_PROJECT_DIR}/vendor/bin:${CI_PROJECT_DIR}/tests/cypress/node_modules/.bin
     - cp config/gitlab-ci/apache-vhost.conf /etc/apache2/sites-available/000-default.conf
