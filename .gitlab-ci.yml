@@ -2,13 +2,13 @@ include:
   - project: 'renovate-bot/renovate-runner'
     file: '/templates/renovate.gitlab-ci.yml'
 
-image: devwithlando/php:8.2-apache-4
+image: devwithlando/php:8.4-apache-4
 
 stages:
   - build
   - lint
-  - test
   - check
+  - test
 
 workflow:
   rules:
@@ -16,10 +16,19 @@ workflow:
     - if: '$CI_PIPELINE_SOURCE == "schedule"'
     - if: '$CI_PIPELINE_SOURCE == "web"'
 
+variables:
+  # https://github.com/box-project/box/issues/1578
+  BOX_REQUIREMENT_CHECKER: 0
+  COMPOSER_CACHE_DIR: "$CI_PROJECT_DIR/.composer-cache"
+  DRUPAL_SQLITE_DATABASE: "${CI_PROJECT_DIR}/tmp/db.sqlite"
+
 .cache_strategy_push:
   cache:
-    key: ${CI_COMMIT_SHA}
+    key:
+      files:
+        - composer.lock
     paths:
+      - .composer-cache
       - vendor
       - web/core
       - web/libraries
@@ -90,10 +99,13 @@ drupal install:
   script:
     - mkdir -p tmp
     - php -i > tmp/php-info.txt
+    - apt update -y
+    - apt install -y sqlite3
+    # settings.local.php provides path to sqlite DB in CI environment.
     - cp config/settings.local.php web/sites/default/
-    - ./vendor/bin/drush site-install commerce_kickstart --site-name='Commerce Demo' --no-interaction --db-url=sqlite://sites/default/files/db.sqlite
-    - chmod -R ugo+rw web/sites/default/files
-    - ./vendor/bin/drush -y pm:enable commerce_dps commerce_demo
+    - ./vendor/bin/drush site-install commerce_kickstart --site-name='Commerce Demo' --no-interaction
+    - chmod -R ugo+rw web/sites/default/files ${DRUPAL_SQLITE_DATABASE}
+    - ./vendor/bin/drush -y pm:install commerce_dps commerce_demo
     - ./vendor/bin/drush -y config:import --partial --source=../config/drupal/splits/ci
     - ./vendor/bin/drush -y config:import --partial --source=../config/drupal/splits/commerce_dps
     - ./vendor/bin/drush -y cron
@@ -105,7 +117,6 @@ drupal install:
     paths:
       - composer.*
       - config/
-      - vendor/
       - tmp/
       - web/
 
@@ -131,6 +142,7 @@ behat:
       ]
   stage: test
   needs:
+    - composer install
     - drupal install
   variables:
     BEHAT_TAGS: "~@skipped"
@@ -139,6 +151,7 @@ behat:
     HOST_PORT: "build:80"
   before_script:
     - mkdir -p tmp
+    - cp config/gitlab-ci/php-config.ini /usr/local/etc/php/conf.d/99-local.ini
     - php -i > tmp/php-info.txt
     - export PATH=$PATH:${CI_PROJECT_DIR}/vendor/bin
     - >
@@ -149,7 +162,7 @@ behat:
     - curl -o tmp/index.html -s http://$HOST_PORT
     - cd tests/behat
   script:
-    - behat --colors --profile ci
+    - behat --colors --profile ci --tags="${BEHAT_TAGS}"
   after_script:
     - COLUMNS=240 ./vendor/bin/drush watchdog:show --count=50000 > ${CI_PROJECT_DIR}/tmp/drupal-log-messages.txt
   artifacts:
@@ -245,6 +258,7 @@ cypress:
       - tests/cypress/build
   stage: test
   needs:
+    - composer install
     - drupal install
   variables:
     CYPRESS_drushCommand: drush
@@ -263,6 +277,8 @@ cypress:
     - apt -y update
     - apt -y install nodejs
     - mkdir -p tmp
+    - cp config/gitlab-ci/php-config.ini /usr/local/etc/php/conf.d/99-local.ini
+    - chmod ugo+rw ${DRUPAL_SQLITE_DATABASE} $( dirname ${DRUPAL_SQLITE_DATABASE} )
     - php -i > tmp/php-info.txt
     - export PATH=$PATH:${CI_PROJECT_DIR}/vendor/bin:${CI_PROJECT_DIR}/tests/cypress/node_modules/.bin
     - cp config/gitlab-ci/apache-vhost.conf /etc/apache2/sites-available/000-default.conf
@@ -303,7 +319,7 @@ cypress:
     PA11Y_THRESHOLD: 100
   services:
     # Entrypoint configuration from https://gitlab.com/gitlab-org/gitlab-runner/-/issues/3210#note_380999884
-    - name: devwithlando/php:8.2-apache-4
+    - name: devwithlando/php:8.4-apache-4
       alias: www
       entrypoint:
         - '/bin/bash'
@@ -433,6 +449,8 @@ renovate config validate:
 composer changes:
   needs: [  ]
   stage: check
+  variables:
+    CHANGES_TXT: composer-changes.txt
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
       changes:
@@ -442,7 +460,12 @@ composer changes:
     - PATH=$PATH:$( composer global config home )/vendor/bin
     - git fetch origin
     - composer global require davidrjonas/composer-lock-diff:^1.0
-    - composer-lock-diff --from origin/$CI_MERGE_REQUEST_TARGET_BRANCH_NAME --md | tee composer-changes.txt
+    - composer-lock-diff --from origin/$CI_MERGE_REQUEST_TARGET_BRANCH_NAME --md | tee '$CHANGES_TXT'
+  artifacts:
+    when: always
+    expire_in: 3w
+    paths:
+      - '$CHANGES_TXT'
 
 success notification:
   extends: .notify matrix

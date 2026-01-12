@@ -9,7 +9,6 @@ dependencies:
     - search_api.server.database
   module:
     - commerce_product
-    - search_api
 _core:
   default_config_hash: VWrAFswgxwnUxKYKUXI4u27n9bLYVFV_jlkvJGgsI3M
 id: products
