@@ -68,6 +68,9 @@
         "!drupal/core-recommended"
       ],
       "prPriority": 20,
+      "composerIgnorePlatformReqs": [
+        "ext-sodium"
+      ],
       "groupName": "Minor and patch - Contrib",
       "groupSlug": "minor-patch-contrib",
       "separateMinorPatch": false
