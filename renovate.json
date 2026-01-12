@@ -94,7 +94,7 @@
       "groupSlug": "custom-theme-npm-updates"
     }
   ],
-  "prConcurrentLimit": 1,
+  "prConcurrentLimit": 4,
   "rebaseWhen": "auto",
   "timezone": "Pacific/Auckland",
   "$schema": "https://docs.renovatebot.com/renovate-schema.json"
