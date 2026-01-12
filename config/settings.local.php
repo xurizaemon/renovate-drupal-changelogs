@@ -197,4 +197,4 @@ if ($env_mailhog_host = getenv('MAILHOG_HOST')) {
   $config['symfony_mailer.mailer_transport.ddev_smtp']['configuration']['host'] = $env_mailhog_host;
 }
 
-error_reporting(E_ALL & ~E_NOTICE & ~E_STRICT & ~E_DEPRECATED);
+error_reporting(E_ALL & ~E_NOTICE & ~E_DEPRECATED);
