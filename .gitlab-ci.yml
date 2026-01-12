@@ -151,6 +151,7 @@ behat:
     HOST_PORT: "build:80"
   before_script:
     - mkdir -p tmp
+    - cp config/gitlab-ci/php-config.ini /usr/local/etc/php/conf.d/99-local.ini
     - php -i > tmp/php-info.txt
     - export PATH=$PATH:${CI_PROJECT_DIR}/vendor/bin
     - >
@@ -276,6 +277,7 @@ cypress:
     - apt -y update
     - apt -y install nodejs
     - mkdir -p tmp
+    - cp config/gitlab-ci/php-config.ini /usr/local/etc/php/conf.d/99-local.ini
     - chmod ugo+rw ${DRUPAL_SQLITE_DATABASE} $( dirname ${DRUPAL_SQLITE_DATABASE} )
     - php -i > tmp/php-info.txt
     - export PATH=$PATH:${CI_PROJECT_DIR}/vendor/bin:${CI_PROJECT_DIR}/tests/cypress/node_modules/.bin
