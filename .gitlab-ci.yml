@@ -24,7 +24,9 @@ variables:
 
 .cache_strategy_push:
   cache:
-    key: ${CI_COMMIT_SHA}
+    key:
+      files:
+        - composer.lock
     paths:
       - .composer-cache
       - vendor
