@@ -52,6 +52,9 @@
         "minor"
       ],
       "prPriority": 30,
+      "composerIgnorePlatformReqs": [
+        "ext-sodium"
+      ],
       "groupName": "Minor and patch - Drupal Core",
       "groupSlug": "minor-patch-core"
     },
