@@ -3,9 +3,6 @@
     "xurizaemon"
   ],
   "automerge": false,
-  "automergeSchedule": [
-    "every weekend"
-  ],
   "branchPrefix": "deps/",
   "constraints": {
     "php": "^8.4"
@@ -14,50 +11,14 @@
     "config:recommended",
     "group:symfony"
   ],
+  "ignorePresets": [
+    "group:monorepos",
+    "group:recommended"
+  ],
   "labels": [
     "dependencies"
   ],
   "packageRules": [
-    {
-      "enabled": false,
-      "matchDepNames": [
-        "php"
-      ]
-    },
-    {
-      "enabled": false,
-      "matchDatasources": [
-        "packagist"
-      ],
-      "matchPackageNames": [
-        "/.*/"
-      ],
-      "matchUpdateTypes": [
-        "major"
-      ],
-      "groupName": "Major all - skipped to update manually"
-    },
-    {
-      "matchDatasources": [
-        "packagist"
-      ],
-      "matchDepNames": [
-        "drupal/core-composer-scaffold",
-        "drupal/core-dev",
-        "drupal/core-project-message",
-        "drupal/core-recommended"
-      ],
-      "matchUpdateTypes": [
-        "patch",
-        "minor"
-      ],
-      "prPriority": 30,
-      "composerIgnorePlatformReqs": [
-        "ext-sodium"
-      ],
-      "groupName": "Minor and patch - Drupal Core",
-      "groupSlug": "minor-patch-core"
-    },
     {
       "matchDatasources": [
         "packagist"
@@ -70,13 +31,53 @@
         "!drupal/core-project-message",
         "!drupal/core-recommended"
       ],
-      "prPriority": 20,
+      "prPriority": 10,
       "composerIgnorePlatformReqs": [
-        "ext-sodium"
+        "ext-*"
       ],
       "groupName": "Minor and patch - Contrib",
-      "groupSlug": "minor-patch-contrib",
+      "groupSlug": "contrib-minor-patch",
       "separateMinorPatch": false
+    },
+    {
+      "matchDatasources": [
+        "packagist"
+      ],
+      "matchDepNames": [
+        "drupal/core-composer-scaffold",
+        "drupal/core-dev",
+        "drupal/core-project-message",
+        "drupal/core-recommended"
+      ],
+      "matchUpdateTypes": [
+        "patch"
+      ],
+      "prPriority": 20,
+      "composerIgnorePlatformReqs": [
+        "ext-*"
+      ],
+      "groupName": "Patch - Drupal Core",
+      "groupSlug": "core-patch"
+    },
+    {
+      "matchDatasources": [
+        "packagist"
+      ],
+      "matchDepNames": [
+        "drupal/core-composer-scaffold",
+        "drupal/core-dev",
+        "drupal/core-project-message",
+        "drupal/core-recommended"
+      ],
+      "matchUpdateTypes": [
+        "minor"
+      ],
+      "prPriority": 30,
+      "composerIgnorePlatformReqs": [
+        "ext-*"
+      ],
+      "groupName": "Minor - Drupal Core",
+      "groupSlug": "core-minor"
     },
     {
       "matchDatasources": [
@@ -89,9 +90,9 @@
         "patch",
         "minor"
       ],
-      "prPriority": 30,
+      "prPriority": 40,
       "groupName": "Minor and patch - NPM",
-      "groupSlug": "custom-theme-npm-updates"
+      "groupSlug": "npm-custom-theme-minor-patch"
     }
   ],
   "prConcurrentLimit": 4,
