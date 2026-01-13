@@ -23,7 +23,7 @@
         "drupal/commerce_demo": "^3.0",
         "drupal/commerce_dps": "^2.0.0",
         "drupal/core-composer-scaffold": "^10.5.0",
-        "drupal/core-recommended": "^10.5.0",
+        "drupal/core-recommended": "^11.0.0",
         "drupal/default_content": "^2",
         "drupal/media_library_theme_reset": "^1.6",
         "drush/drush": "^13.7",
