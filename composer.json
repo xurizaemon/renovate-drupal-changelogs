@@ -35,7 +35,7 @@
         "drevops/behat-format-progress-fail": "^1.3.0",
         "drevops/behat-screenshot": "^1.6.0",
         "drevops/behat-steps": "^2.7.0",
-        "drupal/core-dev": "^10.5.0",
+        "drupal/core-dev": "^11.0.0",
         "drupal/drupal-driver": "^2.3",
         "drupal/drupal-extension": "^5.1",
         "phpro/grumphp-shim": "^2.18.0",
