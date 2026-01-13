@@ -39,7 +39,7 @@
         "drupal/drupal-driver": "^2.3",
         "drupal/drupal-extension": "^5.1",
         "phpro/grumphp-shim": "^2.18.0",
-        "squizlabs/php_codesniffer": "^3.13.5"
+        "squizlabs/php_codesniffer": "^4.0.0"
     },
     "conflict": {
         "drupal/drupal": "*"
