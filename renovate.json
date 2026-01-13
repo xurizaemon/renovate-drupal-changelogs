@@ -32,13 +32,16 @@
         "!drupal/core-project-message",
         "!drupal/core-recommended"
       ],
+      "matchUpdateTypes": [
+        "minor",
+        "patch"
+      ],
       "prPriority": 10,
       "composerIgnorePlatformReqs": [
         "ext-*"
       ],
       "groupName": "Minor and patch - Contrib",
-      "groupSlug": "contrib-minor-patch",
-      "separateMinorPatch": false
+      "groupSlug": "contrib-minor-patch"
     },
     {
       "matchDatasources": [
