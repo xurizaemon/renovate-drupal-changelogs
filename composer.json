@@ -14,7 +14,7 @@
         }
     ],
     "require": {
-        "php": ">=8.4 <8.5",
+        "php": "<8.6",
         "ext-curl": "*",
         "centarro/certified-projects": "^1.0.4",
         "centarro/commerce_kickstart": "^3.0",
