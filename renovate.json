@@ -11,15 +11,15 @@
     "config:recommended",
     "group:symfony"
   ],
-  "ignorePresets": [
-    "group:monorepos",
-    "group:recommended"
-  ],
   "labels": [
     "dependencies"
   ],
   "packageRules": [
     {
+      "ignorePresets": [
+        "group:monorepos",
+        "group:recommended"
+      ],
       "matchDatasources": [
         "packagist"
       ],
