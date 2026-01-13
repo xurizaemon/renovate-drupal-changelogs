@@ -19,7 +19,7 @@
         "centarro/certified-projects": "^1.0.4",
         "centarro/commerce_kickstart": "^3.0",
         "composer/installers": "^2.3.0",
-        "cweagans/composer-patches": "^1.7.3",
+        "cweagans/composer-patches": "^2.0.0",
         "drupal/commerce_demo": "^3.0",
         "drupal/commerce_dps": "^2.0.0",
         "drupal/core-composer-scaffold": "^10.5.0",
