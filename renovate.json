@@ -93,6 +93,12 @@
       "prPriority": 40,
       "groupName": "Minor and patch - NPM",
       "groupSlug": "npm-custom-theme-minor-patch"
+    },
+    {
+      "enabled": false,
+      "matchDepNames": [
+        "php"
+      ]
     }
   ],
   "prConcurrentLimit": 4,
