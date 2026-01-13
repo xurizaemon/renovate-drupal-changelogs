@@ -4,6 +4,7 @@
   ],
   "automerge": false,
   "branchPrefix": "deps/",
+  "branchConcurrentLimit": 0,
   "constraints": {
     "php": "^8.4"
   },
@@ -92,10 +93,17 @@
       ],
       "prPriority": 40,
       "groupName": "Minor and patch - NPM",
-      "groupSlug": "npm-custom-theme-minor-patch"
+      "groupSlug": "theme-npm"
+    },
+    {
+      "enabled": false,
+      "matchDepNames": [
+        "php"
+      ]
     }
   ],
   "prConcurrentLimit": 4,
+  "prHourlyLimit": 0,
   "rebaseWhen": "auto",
   "timezone": "Pacific/Auckland",
   "$schema": "https://docs.renovatebot.com/renovate-schema.json"
