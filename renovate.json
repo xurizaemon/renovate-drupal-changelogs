@@ -92,7 +92,7 @@
       ],
       "prPriority": 40,
       "groupName": "Minor and patch - NPM",
-      "groupSlug": "npm-custom-theme-minor-patch"
+      "groupSlug": "theme-npm"
     },
     {
       "enabled": false,
