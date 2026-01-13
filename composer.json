@@ -16,7 +16,7 @@
     "require": {
         "php": ">=8.4 <8.5",
         "ext-curl": "*",
-        "centarro/certified-projects": "^1.0.4",
+        "centarro/certified-projects": "^2.0.0",
         "centarro/commerce_kickstart": "^3.0",
         "composer/installers": "^2.3.0",
         "cweagans/composer-patches": "^1.7.3",
