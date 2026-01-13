@@ -105,7 +105,7 @@
       ]
     }
   ],
-  "prConcurrentLimit": 4,
+  "prConcurrentLimit": 20,
   "prHourlyLimit": 0,
   "rebaseWhen": "auto",
   "timezone": "Pacific/Auckland",
