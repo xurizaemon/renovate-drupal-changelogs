@@ -4,6 +4,7 @@
   ],
   "automerge": false,
   "branchPrefix": "deps/",
+  "branchConcurrentLimit": 0,
   "constraints": {
     "php": "^8.4"
   },
@@ -102,6 +103,7 @@
     }
   ],
   "prConcurrentLimit": 4,
+  "prHourlyLimit": 0,
   "rebaseWhen": "auto",
   "timezone": "Pacific/Auckland",
   "$schema": "https://docs.renovatebot.com/renovate-schema.json"
